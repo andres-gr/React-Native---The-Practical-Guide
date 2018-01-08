@@ -1,0 +1,87 @@
+{
+    "extends": "airbnb",
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true,
+            "modules": true
+        }
+    },
+    "plugins": [
+        "react",
+        "react-native"
+    ],
+    "env": {
+        "es6": true,
+        "react-native/react-native": true
+    },
+    "rules": {
+        "no-var": ["error"],
+        "indent": ["error", 4, {
+            "SwitchCase": 1
+        }],
+        "semi": ["error", "never"],
+        "no-tabs": ["off"],
+        "key-spacing": ["error", {
+            "align": {
+                "beforeColon": true,
+                "afterColon": true,
+                "on": "colon",
+                "mode": "minimum"
+            },
+            "singleLine": {
+                "beforeColon": false,
+                "afterColon": true,
+            },
+            "multiLine": {
+                "beforeColon": false,
+                "afterColon": true,
+                "mode": "minimum"
+            }
+        }],
+        "no-confusing-arrow": ["error", {
+            "allowParens": true
+        }],
+        "comma-dangle": ["error", "never"],
+        "no-extra-parens": ["error", "all", {
+            "enforceForArrowConditionals": false,
+            "nestedBinaryExpressions": false,
+            "ignoreJSX": "multi-line"
+        }],
+        "arrow-parens": ["error", "as-needed", {
+            "requireForBlockBody": false
+        }],
+        "no-nested-ternary": ["off"],
+        "space-before-function-paren": ["error", "always"],
+        "react/jsx-indent": ["error", 4],
+        "react/jsx-indent-props": ["error", 4],
+        "react/jsx-curly-spacing": ["error", "always", {
+            "spacing": {"objectLiterals": "never"}
+        }],
+        "no-underscore-dangle": ["off"],
+        "import/newline-after-import": ["off"],
+        "max-len": ["off"],
+        "one-var": ["off"],
+        "no-multiple-empty-lines": ["error", {
+            "max": 1,
+            "maxBOF": 0,
+            "maxEOF": 1
+        }],
+        "react/jsx-no-bind": ["error", {
+            "ignoreRefs": true
+        }],
+        "consistent-return": ["off"],
+        "object-shorthand": ["error", "always", {
+            "avoidQuotes": false,
+            "avoidExplicitReturnArrows": false
+        }],
+        "func-names": ["error", "as-needed"],
+        "object-curly-newline": ["error", {
+            "multiline": true,
+            "consistent": true
+        }],
+        "react/jsx-filename-extension": ["error", {
+            "extensions": [".js", ".jsx"]
+        }]
+    }
+}
