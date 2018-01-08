@@ -15,6 +15,7 @@
         "apollo-link-state": "^0.3.0",
         "apollo-link-ws": "^1.0.4",
         "autonumeric": "^4.1.0-beta.20",
+        "glamorous-native": "^1.2.1",
         "graphql": "^0.12.3",
         "graphql-tag": "^2.6.1",
         "jest": "22.0.4",
