@@ -20,6 +20,7 @@
         "graphql-tag": "^2.6.1",
         "jest": "22.0.4",
         "lodash": "^4.17.4",
+        "lodash-decorators": "^4.5.0",
         "moment": "^2.20.1",
         "numeral": "^2.0.6",
         "prop-types": "^15.6.0",
@@ -47,8 +48,10 @@
         "eslint-plugin-react": "^7.5.1",
         "eslint-plugin-react-native": "^3.2.0",
         "husky": "^0.14.3",
-        "react-devtools": "^2.5.2",
-        "react-test-renderer": "^16.0.0"
+        "react-devtools": "^3.0.0",
+        "react-test-renderer": "^16.0.0",
+        "tern": "^0.21.0",
+        "tern-jsx": "^1.0.3"
     },
     "jest": {
         "preset": "react-native"

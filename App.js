@@ -1,50 +1,70 @@
 import React, { Component } from 'react'
 import {
-    Platform,
+    Button,
     StyleSheet,
     Text,
+    TextInput,
     View
 } from 'react-native'
 
-const instructions = Platform.select({
-    ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-    android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu'
-})
-
 const styles = StyleSheet.create({
     container: {
-        flex            : 1,
-        justifyContent  : 'center',
         alignItems      : 'center',
-        backgroundColor : '#F5FCFF'
+        backgroundColor : '#F5FCFF',
+        flex            : 1,
+        justifyContent  : 'flex-start',
+        paddingTop      : 26
     },
-    welcome: {
-        fontSize  : 20,
-        textAlign : 'center',
-        margin    : 10
+    inputContainer: {
+        alignItems      : 'center',
+        flexDirection   : 'row',
+        justifyContent  : 'space-around',
+        width           : '100%'
     },
-    instructions: {
-        textAlign    : 'center',
-        color        : '#333333',
-        marginBottom : 5
+    placeInput: {
+        width: '70%'
+    },
+    placeButton: {
+        width: '30%'
     }
 })
 
-export default class App extends Component { // eslint-disable-line react/prefer-stateless-function
+export default class App extends Component {
+    state = {
+        placeName   : '',
+        places      : []
+    }
+    _handlePlaceNameChange = placeName => {
+        this.setState({ placeName })
+    }
+    _handleButtonPress = () => {
+        if (this.state.placeName.trim() === '') {
+            return
+        }
+        this.setState(prevState => ({
+            places: prevState.places.concat(this.state.placeName)
+        }))
+    }
     render () {
+        const placesOutput = this.state.places.map((place, i) => <Text key={ `key-for-${place}-${i + 1}` }>{ place }</Text>)
         return (
             <View style={ styles.container }>
-                <Text style={ styles.welcome }>
-                    Welcome to React Native!
-                </Text>
-                <Text style={ styles.instructions }>
-                    To get started, edit App.js
-                </Text>
-                <Text style={ styles.instructions }>
-                    { instructions }
-                </Text>
+                <View style={ styles.inputContainer }>
+                    <TextInput
+                        onChangeText={ this._handlePlaceNameChange }
+                        placeholder="Cosa place"
+                        style={ styles.placeInput }
+                        value={ this.state.placeName }
+                    />
+                    <Button
+                        onPress={ this._handleButtonPress }
+                        style={ styles.placeButton }
+                        title="Add"
+                    />
+                </View>
+                <View>
+                    { placesOutput }
+                </View>
             </View>
         )
     }
