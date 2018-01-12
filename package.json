@@ -8,7 +8,7 @@
         "lint": "eslint --ext .js",
         "lintfix": "eslint --fix",
         "lintfixall": "eslint --fix src/ utils/ App.js",
-        "precommit": "eslint --ext .js src/ utils/ App.js",
+        "postcommit": "eslint --ext .js src/ utils/ App.js",
         "prepush": "eslint --ext .js src/ utils/ App.js"
     },
     "dependencies": {
