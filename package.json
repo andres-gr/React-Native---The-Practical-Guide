@@ -4,7 +4,12 @@
     "private": true,
     "scripts": {
         "start": "node node_modules/react-native/local-cli/cli.js start",
-        "test": "jest"
+        "test": "jest",
+        "lint": "eslint --ext .js",
+        "lintfix": "eslint --fix",
+        "lintfixall": "eslint --fix src/ utils/ App.js",
+        "precommit": "eslint --ext .js src/ utils/ App.js",
+        "prepush": "eslint --ext .js src/ utils/ App.js"
     },
     "dependencies": {
         "apollo-cache-inmemory": "^1.1.4",
