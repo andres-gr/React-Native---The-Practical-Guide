@@ -8,7 +8,7 @@ const GlamContainer = glamFactory(View, 'GlamContainer', {
     width: '100%'
 })
 
-const ListContainer = ({ places }) => {
+const List = ({ places }) => {
     const output = places.map((place, i) => <ListItem key={ `key-for-${place}-${i + 1}` } placeName={ place } />)
     return (
         <GlamContainer>
@@ -17,8 +17,8 @@ const ListContainer = ({ places }) => {
     )
 }
 
-ListContainer.propTypes = {
-    places: PropTypes.oneOfType([PropTypes.array]).isRequired
+List.propTypes = {
+    places: PropTypes.arrayOf(PropTypes.string).isRequired
 }
 
-export default ListContainer
+export default List

@@ -4,7 +4,7 @@ import {
     View
 } from 'react-native'
 import UserInput from './src/components/UserInput/UserInput'
-import ListContainer from './src/components/ListContainer/ListContainer'
+import List from './src/components/List/List'
 
 const styles = StyleSheet.create({
     container: {
@@ -42,7 +42,7 @@ export default class App extends Component {
                     title="Add"
                     value={ this.state.placeName }
                 />
-                <ListContainer places={ this.state.places } />
+                <List places={ this.state.places } />
             </View>
         )
     }
