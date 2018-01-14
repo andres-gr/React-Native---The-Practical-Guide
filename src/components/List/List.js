@@ -10,12 +10,12 @@ const GlamList = glamFactory(FlatList, 'GlamList', {
 
 class List extends PureComponent {
     static propTypes = {
-        deleteEvent : PropTypes.func.isRequired,
+        pressEvent  : PropTypes.func.isRequired,
         places      : PropTypes.arrayOf(PropTypes.object).isRequired
     }
     renderItem = ({ item }) => (
         <ListItem
-            deleteEvent={ this.props.deleteEvent }
+            pressEvent={ this.props.pressEvent }
             itemId={ item.key }
             placeImage={ item.image }
             placeName={ item.name }

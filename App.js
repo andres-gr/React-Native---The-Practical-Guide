@@ -5,6 +5,7 @@ import {
 } from 'react-native'
 import UserInput from './src/components/UserInput/UserInput'
 import List from './src/components/List/List'
+import PlaceDetail from './src/components/PlaceDetail/PlaceDetail'
 
 const styles = StyleSheet.create({
     container: {
@@ -18,8 +19,9 @@ const styles = StyleSheet.create({
 
 export default class App extends Component {
     state = {
-        placeName   : '',
-        places      : []
+        placeName       : '',
+        places          : [],
+        selectedPlace   : null
     }
     _handlePlaceNameChange = placeName => {
         this.setState({ placeName })
@@ -36,10 +38,17 @@ export default class App extends Component {
             })
         }))
     }
-    _handleItemDelete = key => {
+    _handleItemPress = key => {
+        this.setState(prevState => ({ selectedPlace: prevState.places.find(place => place.key === key) }))
+    }
+    _handleItemDelete = () => {
         this.setState(prevState => ({
-            places: prevState.places.filter(place => place.key !== key)
+            places          : prevState.places.filter(place => place.key !== prevState.selectedPlace.key),
+            selectedPlace   : null
         }))
+    }
+    _handleCloseModal = () => {
+        this.setState({ selectedPlace: null })
     }
     render () {
         return (
@@ -52,8 +61,13 @@ export default class App extends Component {
                     value={ this.state.placeName }
                 />
                 <List
-                    deleteEvent={ this._handleItemDelete }
+                    pressEvent={ this._handleItemPress }
                     places={ this.state.places }
+                />
+                <PlaceDetail
+                    closeModalEvent={ this._handleCloseModal }
+                    deleteEvent={ this._handleItemDelete }
+                    selectedPlace={ this.state.selectedPlace }
                 />
             </View>
         )

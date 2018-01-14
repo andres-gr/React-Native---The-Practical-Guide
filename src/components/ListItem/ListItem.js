@@ -25,13 +25,13 @@ const GlamImage = glamFactory(Image, 'GlamImage', {
 
 class ListItem extends PureComponent {
     static propTypes = {
-        deleteEvent : PropTypes.func.isRequired,
+        pressEvent  : PropTypes.func.isRequired,
         itemId      : PropTypes.number.isRequired,
         placeName   : PropTypes.string.isRequired,
         placeImage  : PropTypes.oneOfType([PropTypes.any]).isRequired
     }
     _handlePress = () => {
-        this.props.deleteEvent(this.props.itemId)
+        this.props.pressEvent(this.props.itemId)
     }
     render () {
         const { placeName, placeImage } = this.props
