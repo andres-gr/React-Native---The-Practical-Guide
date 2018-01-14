@@ -5,6 +5,7 @@ import {
 } from 'react-native'
 import UserInput from './src/components/UserInput/UserInput'
 import List from './src/components/List/List'
+import image0 from './src/assets/images/image0.jpg'
 
 const styles = StyleSheet.create({
     container: {
@@ -31,7 +32,8 @@ export default class App extends Component {
         this.setState(prevState => ({
             places: prevState.places.concat({
                 key     : Math.random(),
-                value   : this.state.placeName
+                name    : this.state.placeName,
+                image   : image0
             })
         }))
     }

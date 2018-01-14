@@ -17,7 +17,8 @@ class List extends PureComponent {
         <ListItem
             deleteEvent={ this.props.deleteEvent }
             itemId={ item.key }
-            placeName={ item.value }
+            placeImage={ item.image }
+            placeName={ item.name }
         />
     )
     render () {
