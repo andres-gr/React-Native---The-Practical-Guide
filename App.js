@@ -32,6 +32,11 @@ export default class App extends Component {
             places: prevState.places.concat(this.state.placeName)
         }))
     }
+    _handleItemDelete = index => {
+        this.setState(prevState => ({
+            places: prevState.places.filter((place, i) => i !== index)
+        }))
+    }
     render () {
         return (
             <View style={ styles.container }>
@@ -42,7 +47,10 @@ export default class App extends Component {
                     title="Add"
                     value={ this.state.placeName }
                 />
-                <List places={ this.state.places } />
+                <List
+                    deleteEvent={ this._handleItemDelete }
+                    places={ this.state.places }
+                />
             </View>
         )
     }
