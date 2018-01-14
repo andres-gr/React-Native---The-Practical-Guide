@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { View } from 'react-native'
+import { ScrollView } from 'react-native'
 import glamFactory from '../../../utils/styles/glamFactory'
 import ListItem from '../ListItem/ListItem'
 
-const GlamContainer = glamFactory(View, 'GlamContainer', {
+const GlamContainer = glamFactory(ScrollView, 'GlamContainer', {
     width: '100%'
 })
 
