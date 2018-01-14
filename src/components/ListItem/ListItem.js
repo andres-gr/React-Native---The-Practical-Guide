@@ -18,9 +18,9 @@ const GlamView = glamFactory(View, 'GlamView', {
 })
 
 const GlamImage = glamFactory(Image, 'GlamImage', {
+    height      : 30,
     marginRight : 8,
-    maxHeight   : 30,
-    maxWidth    : 30
+    width       : 30
 })
 
 class ListItem extends PureComponent {

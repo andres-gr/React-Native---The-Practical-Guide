@@ -5,7 +5,6 @@ import {
 } from 'react-native'
 import UserInput from './src/components/UserInput/UserInput'
 import List from './src/components/List/List'
-import image0 from './src/assets/images/image0.jpg'
 
 const styles = StyleSheet.create({
     container: {
@@ -33,7 +32,7 @@ export default class App extends Component {
             places: prevState.places.concat({
                 key     : Math.random(),
                 name    : this.state.placeName,
-                image   : image0
+                image   : { uri: 'http://lorempixel.com/output/abstract-q-c-640-480-2.jpg' }
             })
         }))
     }
