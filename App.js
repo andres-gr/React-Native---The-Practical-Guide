@@ -29,12 +29,15 @@ export default class App extends Component {
             return
         }
         this.setState(prevState => ({
-            places: prevState.places.concat(this.state.placeName)
+            places: prevState.places.concat({
+                key     : Math.random(),
+                value   : this.state.placeName
+            })
         }))
     }
-    _handleItemDelete = index => {
+    _handleItemDelete = key => {
         this.setState(prevState => ({
-            places: prevState.places.filter((place, i) => i !== index)
+            places: prevState.places.filter(place => place.key !== key)
         }))
     }
     render () {

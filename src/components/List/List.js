@@ -1,35 +1,33 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { ScrollView } from 'react-native'
+import { FlatList } from 'react-native'
 import glamFactory from '../../../utils/styles/glamFactory'
 import ListItem from '../ListItem/ListItem'
 
-const GlamContainer = glamFactory(ScrollView, 'GlamContainer', {
+const GlamList = glamFactory(FlatList, 'GlamList', {
     width: '100%'
 })
 
-const List = ({
-    deleteEvent,
-    places
-}) => {
-    const output = places.map((place, i) => (
+class List extends PureComponent {
+    static propTypes = {
+        deleteEvent : PropTypes.func.isRequired,
+        places      : PropTypes.arrayOf(PropTypes.object).isRequired
+    }
+    renderItem = ({ item }) => (
         <ListItem
-            deleteEvent={ deleteEvent }
-            itemId={ i }
-            key={ `key-for-${place}-${i + 1}` }
-            placeName={ place }
+            deleteEvent={ this.props.deleteEvent }
+            itemId={ item.key }
+            placeName={ item.value }
         />
-    ))
-    return (
-        <GlamContainer>
-            { output }
-        </GlamContainer>
     )
-}
-
-List.propTypes = {
-    deleteEvent : PropTypes.func.isRequired,
-    places      : PropTypes.arrayOf(PropTypes.string).isRequired
+    render () {
+        return (
+            <GlamList
+                data={ this.props.places }
+                renderItem={ this.renderItem }
+            />
+        )
+    }
 }
 
 export default List
