@@ -5,7 +5,7 @@ import {
     TextInput,
     View
 } from 'react-native'
-import glamFactory from '../../../utils/styles/glamFactory'
+import glamFactory from '../../utils/styles/glamFactory'
 
 const GlamInputContainer = glamFactory(View, 'GlamInputContainer', {
     alignItems      : 'center',

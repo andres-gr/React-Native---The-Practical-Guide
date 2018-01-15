@@ -6,7 +6,7 @@ import {
     TouchableOpacity,
     View
 } from 'react-native'
-import glamFactory from '../../../utils/styles/glamFactory'
+import glamFactory from '../../utils/styles/glamFactory'
 
 const GlamView = glamFactory(View, 'GlamView', {
     alignItems      : 'center',
@@ -26,7 +26,7 @@ const GlamImage = glamFactory(Image, 'GlamImage', {
 class ListItem extends PureComponent {
     static propTypes = {
         pressEvent  : PropTypes.func.isRequired,
-        itemId      : PropTypes.number.isRequired,
+        itemId      : PropTypes.string.isRequired,
         placeName   : PropTypes.string.isRequired,
         placeImage  : PropTypes.oneOfType([PropTypes.any]).isRequired
     }

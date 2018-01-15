@@ -1,4 +1,4 @@
 import { AppRegistry } from 'react-native'
-import App from './App'
+import ApolloContainer from './src/ApolloContainer'
 
-AppRegistry.registerComponent('tutorialApp', () => App)
+AppRegistry.registerComponent('tutorialApp', () => ApolloContainer)

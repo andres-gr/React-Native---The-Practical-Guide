@@ -7,7 +7,7 @@ import {
     Text,
     View
 } from 'react-native'
-import glamFactory from '../../../utils/styles/glamFactory'
+import glamFactory from '../../utils/styles/glamFactory'
 
 const GlamModalContainer = glamFactory(View, 'GlamModalContainer', {
     margin: 22

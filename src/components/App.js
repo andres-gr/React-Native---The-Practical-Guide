@@ -3,9 +3,9 @@ import {
     StyleSheet,
     View
 } from 'react-native'
-import UserInput from './src/components/UserInput/UserInput'
-import List from './src/components/List/List'
-import PlaceDetail from './src/components/PlaceDetail/PlaceDetail'
+import UserInput from './../components/UserInput/UserInput'
+import List from './../components/List/List'
+import PlaceDetail from './../components/PlaceDetail/PlaceDetail'
 
 const styles = StyleSheet.create({
     container: {
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     }
 })
 
-export default class App extends Component {
+class App extends Component {
     state = {
         placeName       : '',
         places          : [],
@@ -32,7 +32,7 @@ export default class App extends Component {
         }
         this.setState(prevState => ({
             places: prevState.places.concat({
-                key     : Math.random(),
+                key     : String(Math.random()),
                 name    : this.state.placeName,
                 image   : { uri: 'http://lorempixel.com/output/abstract-q-c-640-480-2.jpg' }
             })
@@ -73,3 +73,5 @@ export default class App extends Component {
         )
     }
 }
+
+export default App

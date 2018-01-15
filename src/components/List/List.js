@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { FlatList } from 'react-native'
-import glamFactory from '../../../utils/styles/glamFactory'
+import glamFactory from '../../utils/styles/glamFactory'
 import ListItem from '../ListItem/ListItem'
 
 const GlamList = glamFactory(FlatList, 'GlamList', {
