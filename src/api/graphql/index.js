@@ -8,14 +8,13 @@ import merge from 'lodash/merge'
 import rootState from './state/root/'
 import { types } from '../../utils/helpers/GiveProps'
 
-const cache = new InMemoryCache()
-const defaults = merge(rootState.defaults)
-const resolvers = merge(rootState.resolvers)
+const cache = new InMemoryCache({
+    dataIdFromObject: obj => obj._id || obj.id || obj.key
+})
 
 const link = withClientState({
     cache,
-    defaults,
-    resolvers
+    ...merge(rootState)
 })
 
 export const client = new ApolloClient({

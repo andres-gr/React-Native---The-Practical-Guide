@@ -28,7 +28,7 @@ class ListItem extends PureComponent {
         pressEvent  : PropTypes.func.isRequired,
         itemId      : PropTypes.string.isRequired,
         placeName   : PropTypes.string.isRequired,
-        placeImage  : PropTypes.oneOfType([PropTypes.any]).isRequired
+        placeImage  : PropTypes.any.isRequired
     }
     _handlePress = () => {
         this.props.pressEvent(this.props.itemId)

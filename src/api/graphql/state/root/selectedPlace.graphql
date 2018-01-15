@@ -1,0 +1,3 @@
+query GetSelectedPlace {
+    selectedPlace @client
+}

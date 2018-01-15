@@ -1,0 +1,5 @@
+mutation AddPlace($newPlace: String!) {
+    addPlace(newPlace: $newPlace) @client {
+        places
+    }
+}

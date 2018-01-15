@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import {
     StyleSheet,
     View
@@ -18,9 +19,12 @@ const styles = StyleSheet.create({
 })
 
 class App extends Component {
+    static propTypes = {
+        addPlace    : PropTypes.func.isRequired,
+        places      : PropTypes.arrayOf(PropTypes.object).isRequired
+    }
     state = {
         placeName       : '',
-        places          : [],
         selectedPlace   : null
     }
     _handlePlaceNameChange = placeName => {
@@ -30,22 +34,23 @@ class App extends Component {
         if (this.state.placeName.trim() === '') {
             return
         }
-        this.setState(prevState => ({
-            places: prevState.places.concat({
-                key     : String(Math.random()),
-                name    : this.state.placeName,
-                image   : { uri: 'http://lorempixel.com/output/abstract-q-c-640-480-2.jpg' }
-            })
-        }))
+        this.props.addPlace(this.state.placeName)
+        // this.setState(prevState => ({
+        //     places: prevState.places.concat({
+        //         key     : String(Math.random()),
+        //         name    : this.state.placeName,
+        //         image   : { uri: 'http://lorempixel.com/output/abstract-q-c-640-480-2.jpg' }
+        //     })
+        // }))
     }
     _handleItemPress = key => {
-        this.setState(prevState => ({ selectedPlace: prevState.places.find(place => place.key === key) }))
+        this.setState({ selectedPlace: this.props.places.find(place => place.key === key) })
     }
     _handleItemDelete = () => {
-        this.setState(prevState => ({
-            places          : prevState.places.filter(place => place.key !== prevState.selectedPlace.key),
-            selectedPlace   : null
-        }))
+        // this.setState(prevState => ({
+        //     places          : prevState.places.filter(place => place.key !== prevState.selectedPlace.key),
+        //     selectedPlace   : null
+        // }))
     }
     _handleCloseModal = () => {
         this.setState({ selectedPlace: null })
@@ -62,7 +67,7 @@ class App extends Component {
                 />
                 <List
                     pressEvent={ this._handleItemPress }
-                    places={ this.state.places }
+                    places={ this.props.places }
                 />
                 <PlaceDetail
                     closeModalEvent={ this._handleCloseModal }
