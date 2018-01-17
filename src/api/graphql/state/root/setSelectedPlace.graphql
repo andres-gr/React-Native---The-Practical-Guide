@@ -1,0 +1,5 @@
+mutation SetSelectedPlace($key: String!) {
+    setSelectedPlace(key: $key) @client {
+        selectedPlace
+    }
+}

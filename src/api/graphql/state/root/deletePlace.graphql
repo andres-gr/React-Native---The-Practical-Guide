@@ -1,0 +1,5 @@
+mutation DeletePlace($key: String!) {
+    deletePlace(key: $key) @client {
+        places
+    }
+}

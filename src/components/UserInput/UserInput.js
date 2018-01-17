@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import {
     Button,
@@ -22,36 +22,42 @@ const GlamButton = glamFactory(Button, 'GlamButton', {
     width: '30%'
 })
 
-const UserInput = ({
-    onChangeText,
-    onPress,
-    placeholder,
-    title,
-    value
-}) => (
-    <GlamInputContainer>
-        <GlamTextInput
-            onChangeText={ onChangeText }
-            placeholder={ placeholder }
-            value={ value }
-        />
-        <GlamButton
-            onPress={ onPress }
-            title={ title }
-        />
-    </GlamInputContainer>
-)
-
-UserInput.propTypes = {
-    onChangeText    : PropTypes.func.isRequired,
-    onPress         : PropTypes.func.isRequired,
-    placeholder     : PropTypes.string.isRequired,
-    title           : PropTypes.string.isRequired,
-    value           : PropTypes.string
-}
-
-UserInput.defaultProps = {
-    value: ''
+class UserInput extends PureComponent {
+    static propTypes = {
+        onPress         : PropTypes.func.isRequired,
+        placeholder     : PropTypes.string.isRequired,
+        title           : PropTypes.string.isRequired
+    }
+    state = {
+        placeName: ''
+    }
+    _handleChangeText = placeName => {
+        this.setState({ placeName })
+    }
+    _handleBtnPress = () => {
+        if (this.state.placeName.trim() === '') {
+            return
+        }
+        this.props.onPress(this.state.placeName)
+    }
+    render () {
+        const {
+            placeholder,
+            title
+        } = this.props
+        return (
+            <GlamInputContainer>
+                <GlamTextInput
+                    onChangeText={ this._handleChangeText }
+                    placeholder={ placeholder }
+                />
+                <GlamButton
+                    onPress={ this._handleBtnPress }
+                    title={ title }
+                />
+            </GlamInputContainer>
+        )
+    }
 }
 
 export default UserInput

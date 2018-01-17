@@ -9,7 +9,7 @@ import rootState from './state/root/'
 import { types } from '../../utils/helpers/GiveProps'
 
 const cache = new InMemoryCache({
-    dataIdFromObject: obj => obj._id || obj.id || obj.key
+    dataIdFromObject: obj => obj._id
 })
 
 const link = withClientState({

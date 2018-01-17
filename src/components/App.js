@@ -20,50 +20,34 @@ const styles = StyleSheet.create({
 
 class App extends Component {
     static propTypes = {
-        addPlace    : PropTypes.func.isRequired,
-        places      : PropTypes.arrayOf(PropTypes.object).isRequired
+        addPlace            : PropTypes.func.isRequired,
+        deletePlace         : PropTypes.func.isRequired,
+        setSelectedPlace    : PropTypes.func.isRequired,
+        places              : PropTypes.arrayOf(PropTypes.object).isRequired,
+        selectedPlace       : PropTypes.object
     }
-    state = {
-        placeName       : '',
-        selectedPlace   : null
+    static defaultProps = {
+        selectedPlace: null
     }
-    _handlePlaceNameChange = placeName => {
-        this.setState({ placeName })
-    }
-    _handleButtonPress = () => {
-        if (this.state.placeName.trim() === '') {
-            return
-        }
-        this.props.addPlace(this.state.placeName)
-        // this.setState(prevState => ({
-        //     places: prevState.places.concat({
-        //         key     : String(Math.random()),
-        //         name    : this.state.placeName,
-        //         image   : { uri: 'http://lorempixel.com/output/abstract-q-c-640-480-2.jpg' }
-        //     })
-        // }))
+    _handleButtonPress = placeName => {
+        this.props.addPlace(placeName)
     }
     _handleItemPress = key => {
-        this.setState({ selectedPlace: this.props.places.find(place => place.key === key) })
+        this.props.setSelectedPlace(key)
     }
     _handleItemDelete = () => {
-        // this.setState(prevState => ({
-        //     places          : prevState.places.filter(place => place.key !== prevState.selectedPlace.key),
-        //     selectedPlace   : null
-        // }))
+        this.props.deletePlace(this.props.selectedPlace.key)
     }
     _handleCloseModal = () => {
-        this.setState({ selectedPlace: null })
+        this.props.setSelectedPlace(null)
     }
     render () {
         return (
             <View style={ styles.container }>
                 <UserInput
-                    onChangeText={ this._handlePlaceNameChange }
                     onPress={ this._handleButtonPress }
                     placeholder="Add an awesome place"
                     title="Add"
-                    value={ this.state.placeName }
                 />
                 <List
                     pressEvent={ this._handleItemPress }
@@ -72,7 +56,7 @@ class App extends Component {
                 <PlaceDetail
                     closeModalEvent={ this._handleCloseModal }
                     deleteEvent={ this._handleItemDelete }
-                    selectedPlace={ this.state.selectedPlace }
+                    selectedPlace={ this.props.selectedPlace }
                 />
             </View>
         )

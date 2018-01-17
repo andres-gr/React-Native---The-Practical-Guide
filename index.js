@@ -1,4 +1,12 @@
+import React from 'react'
 import { AppRegistry } from 'react-native'
-import ApolloContainer from './src/ApolloContainer'
+import Apollo from './src/api/graphql/'
+import App from './src/containers/App'
+
+const ApolloContainer = () => (
+    <Apollo>
+        <App />
+    </Apollo>
+)
 
 AppRegistry.registerComponent('tutorialApp', () => ApolloContainer)
