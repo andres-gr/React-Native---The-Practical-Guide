@@ -5,8 +5,10 @@ import {
     Image,
     Modal,
     Text,
+    TouchableOpacity,
     View
 } from 'react-native'
+import Icon from 'react-native-vector-icons/Ionicons'
 import glamFactory from '../../utils/styles/glamFactory'
 
 const GlamModalContainer = glamFactory(View, 'GlamModalContainer', {
@@ -24,13 +26,17 @@ const GlamModalText = glamFactory(Text, 'GlamModalText', {
     textAlign  : 'center'
 })
 
+const GlamDeleteBtn = glamFactory(View, 'GlamDeleteBtn', {
+    alignItems: 'center'
+})
+
 class PlaceDetail extends PureComponent {
     static propTypes = {
         closeModalEvent : PropTypes.func.isRequired,
         deleteEvent     : PropTypes.func.isRequired,
         selectedPlace   : PropTypes.shape({
             image   : PropTypes.any,
-            key     : PropTypes.number,
+            key     : PropTypes.string,
             name    : PropTypes.string
         })
     }
@@ -66,11 +72,17 @@ class PlaceDetail extends PureComponent {
                         : null
                     }
                     <View>
-                        <Button
-                            color="red"
+                        <TouchableOpacity
                             onPress={ this._handleDeletePress }
-                            title="Delete"
-                        />
+                        >
+                            <GlamDeleteBtn>
+                                <Icon
+                                    name="ios-trash"
+                                    size={ 30 }
+                                    color="red"
+                                />
+                            </GlamDeleteBtn>
+                        </TouchableOpacity>
                         <Button
                             onPress={ closeModalEvent }
                             title="Close"
@@ -80,19 +92,6 @@ class PlaceDetail extends PureComponent {
             </Modal>
         )
     }
-}
-
-PlaceDetail.propTypes = {
-    closeModalEvent : PropTypes.func.isRequired,
-    deleteEvent     : PropTypes.func.isRequired,
-    selectedPlace   : PropTypes.shape({
-        image  : PropTypes.any,
-        name   : PropTypes.string
-    })
-}
-
-PlaceDetail.defaultProps = {
-    selectedPlace: null
 }
 
 export default PlaceDetail
