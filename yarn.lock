@@ -3655,7 +3655,7 @@ lodash.templatesettings@^3.0.0:
     lodash._reinterpolate "^3.0.0"
     lodash.escape "^3.0.0"
 
-lodash@4.17.4, lodash@^4.0.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.16.6, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.3.0, lodash@^4.6.1:
+lodash@4.17.4, lodash@4.x.x, lodash@^4.0.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.16.6, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.3.0, lodash@^4.6.1:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -4602,6 +4602,12 @@ react-native-meteor@^1.2.0:
     trackr "^2.0.2"
     underscore "^1.8.3"
     wolfy87-eventemitter "^4.3.0"
+
+react-native-navigation@^1.1.346:
+  version "1.1.346"
+  resolved "https://registry.yarnpkg.com/react-native-navigation/-/react-native-navigation-1.1.346.tgz#5c4d30f9cfebaec88bcb40ca9b2591554f2463bd"
+  dependencies:
+    lodash "4.x.x"
 
 react-native-tab-view@^0.0.74:
   version "0.0.74"
