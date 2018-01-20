@@ -10,6 +10,7 @@
         }],
         "babel-plugin-syntax-decorators",
         "babel-plugin-transform-decorators-legacy",
-        "babel-plugin-transform-decorators"
+        "babel-plugin-transform-decorators",
+        "babel-plugin-transform-do-expressions"
     ]
 }

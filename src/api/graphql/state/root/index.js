@@ -1,17 +1,14 @@
 import GET_CURRENT_PLACES from './places.graphql'
-import SELECTED_PLACE from './selectedPlace.graphql'
 
 let idPlace = 0
 
 const rootState = {
     defaults: {
-        places          : [],
-        selectedPlace   : null
+        places: []
     },
     resolvers: {
         Query: {
-            places          : () => [],
-            selectedPlace   : () => null
+            places: () => []
         },
         Mutation: {
             addPlace: (_root, { newPlace }, { cache }) => {
@@ -38,23 +35,12 @@ const rootState = {
             deletePlace: (_root, { key }, { cache }) => {
                 const prevCache = cache.readQuery({ query: GET_CURRENT_PLACES }),
                     data = {
-                        places          : prevCache.places.filter(place => place.key !== key),
-                        selectedPlace   : null
+                        places: prevCache.places.filter(place => place.key !== key)
                     }
-                cache.writeData({ data })
+                cache.writeQuery({ data, query: GET_CURRENT_PLACES })
                 return {
                     ...data,
-                    __typename: 'PlacesStateSelectedState'
-                }
-            },
-            setSelectedPlace: (_root, { key }, { cache }) => {
-                const prevCache = cache.readQuery({ query: GET_CURRENT_PLACES }),
-                    selectedPlace = key != null ? prevCache.places.find(place => place.key === key) : null,
-                    data = { selectedPlace }
-                cache.writeQuery({ data, query: SELECTED_PLACE })
-                return {
-                    ...data,
-                    __typename: 'SelectedPlace'
+                    __typename: 'PlacesState'
                 }
             }
         }

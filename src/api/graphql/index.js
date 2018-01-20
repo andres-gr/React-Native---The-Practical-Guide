@@ -6,7 +6,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloProvider } from 'react-apollo'
 import merge from 'lodash/merge'
 import rootState from './state/root/'
-import { types } from '../../utils/helpers/GiveProps'
+import { types } from '../../utils/helpers/giveProps'
 
 const cache = new InMemoryCache({
     dataIdFromObject: obj => obj._id

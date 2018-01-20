@@ -4,7 +4,7 @@ import {
     StyleSheet,
     View
 } from 'react-native'
-import UserInput from './../components/UserInput/UserInput'
+import PlaceInput from './../components/PlaceInput/PlaceInput'
 import List from './../components/List/List'
 import PlaceDetail from './../components/PlaceDetail/PlaceDetail'
 
@@ -44,7 +44,7 @@ class App extends Component {
     render () {
         return (
             <View style={ styles.container }>
-                <UserInput
+                <PlaceInput
                     onPress={ this._handleButtonPress }
                     placeholder="Add an awesome place"
                     title="Add"

@@ -8,4 +8,4 @@ export const types = [
     PropTypes.symbol
 ]
 
-export const GiveProps = (ConstructedComponent, props) => (ConstructedComponent ? <ConstructedComponent { ...props } /> : null)
+export const giveProps = (ConstructedComponent, props) => (ConstructedComponent ? <ConstructedComponent { ...props } /> : null)

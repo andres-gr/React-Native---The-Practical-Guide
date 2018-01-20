@@ -22,9 +22,9 @@ const GlamButton = glamFactory(Button, 'GlamButton', {
     width: '30%'
 })
 
-class UserInput extends PureComponent {
+class PlaceInput extends PureComponent {
     static propTypes = {
-        onPress         : PropTypes.func.isRequired,
+        pressEvent      : PropTypes.func.isRequired,
         placeholder     : PropTypes.string.isRequired,
         title           : PropTypes.string.isRequired
     }
@@ -38,7 +38,7 @@ class UserInput extends PureComponent {
         if (this.state.placeName.trim() === '') {
             return
         }
-        this.props.onPress(this.state.placeName)
+        this.props.pressEvent(this.state.placeName)
     }
     render () {
         const {
@@ -60,4 +60,4 @@ class UserInput extends PureComponent {
     }
 }
 
-export default UserInput
+export default PlaceInput
