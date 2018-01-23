@@ -4,6 +4,7 @@ import startMainTabs from '../MainTabs/startMainTabs'
 import glamFactory from '../../utils/styles/glamFactory'
 import DefaultInput from '../../components/UI/DefaultInput'
 import HeadingText from '../../components/UI/HeadingText'
+import MainText from '../../components/UI/MainText'
 
 const GlamAuthContainer = glamFactory(View, 'GlamAuthContainer', {
     alignItems      : 'center',
@@ -34,7 +35,9 @@ class AuthScreen extends Component {
     render () {
         return (
             <GlamAuthContainer>
-                <HeadingText>Please Log In</HeadingText>
+                <MainText>
+                    <HeadingText>Please Log In</HeadingText>
+                </MainText>
                 <Button
                     title="Switch to Login"
                 />

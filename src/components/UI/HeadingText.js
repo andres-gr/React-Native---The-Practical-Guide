@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
 const HeadingText = props => (
     <Text
         { ...props }
-        style={ [styles.text, { ...props.style }] }
+        style={ [styles.text, props.style] }
     >
         { props.children }
     </Text>
