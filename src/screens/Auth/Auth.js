@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Button, Text, View } from 'react-native'
+import { Button, View } from 'react-native'
 import startMainTabs from '../MainTabs/startMainTabs'
 import glamFactory from '../../utils/styles/glamFactory'
 import DefaultInput from '../../components/UI/DefaultInput'
+import HeadingText from '../../components/UI/HeadingText'
 
 const GlamAuthContainer = glamFactory(View, 'GlamAuthContainer', {
     alignItems      : 'center',
@@ -33,7 +34,7 @@ class AuthScreen extends Component {
     render () {
         return (
             <GlamAuthContainer>
-                <Text>Please Log In</Text>
+                <HeadingText>Please Log In</HeadingText>
                 <Button
                     title="Switch to Login"
                 />
