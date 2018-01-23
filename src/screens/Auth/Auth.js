@@ -1,6 +1,30 @@
 import React, { Component } from 'react'
 import { Button, Text, View } from 'react-native'
 import startMainTabs from '../MainTabs/startMainTabs'
+import glamFactory from '../../utils/styles/glamFactory'
+import DefaultInput from '../../components/UI/DefaultInput'
+
+const GlamAuthContainer = glamFactory(View, 'GlamAuthContainer', {
+    alignItems      : 'center',
+    flex            : 1,
+    justifyContent  : 'center',
+    padding         : 8
+})
+
+const GlamInputContainer = glamFactory(View, 'GlamInputContainer', {
+    width: '80%'
+})
+
+const inputStyles = {
+    backgroundColor : '#EEE',
+    borderColor     : '#BBB'
+}
+
+const GlamEmailContainer = glamFactory(DefaultInput, 'GlamEmailContainer', inputStyles)
+
+const GlamPasswordInput = glamFactory(DefaultInput, 'GlamPasswordInput', inputStyles)
+
+const GlamConfirmInput = glamFactory(DefaultInput, 'GlamConfirmInput', inputStyles)
 
 class AuthScreen extends Component {
     _handleLogin = () => {
@@ -8,13 +32,27 @@ class AuthScreen extends Component {
     }
     render () {
         return (
-            <View>
-                <Text>Auth Screen</Text>
+            <GlamAuthContainer>
+                <Text>Please Log In</Text>
+                <Button
+                    title="Switch to Login"
+                />
+                <GlamInputContainer>
+                    <GlamEmailContainer
+                        placeholder="Your email Address"
+                    />
+                    <GlamPasswordInput
+                        placeholder="Password"
+                    />
+                    <GlamConfirmInput
+                        placeholder="Confirm Password"
+                    />
+                </GlamInputContainer>
                 <Button
                     onPress={ this._handleLogin }
-                    title="Login"
+                    title="Submit"
                 />
-            </View>
+            </GlamAuthContainer>
         )
     }
 }
