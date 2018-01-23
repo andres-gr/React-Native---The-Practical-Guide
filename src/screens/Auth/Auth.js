@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { Button, ImageBackground, View } from 'react-native'
+import { ImageBackground, View } from 'react-native'
 import startMainTabs from '../MainTabs/startMainTabs'
 import glamFactory from '../../utils/styles/glamFactory'
 import DefaultInput from '../../components/UI/DefaultInput'
 import HeadingText from '../../components/UI/HeadingText'
 import MainText from '../../components/UI/MainText'
 import backgroundImage from '../../assets/images/background.jpg'
+import RaisedButton from '../../components/UI/RaisedButton'
 
 const GlamAuthContainer = glamFactory(View, 'GlamAuthContainer', {
     alignItems      : 'center',
@@ -35,6 +36,9 @@ const GlamPasswordInput = glamFactory(DefaultInput, 'GlamPasswordInput', inputSt
 const GlamConfirmInput = glamFactory(DefaultInput, 'GlamConfirmInput', inputStyles)
 
 class AuthScreen extends Component {
+    _handleSwitchLogin = () => {
+        alert('Cosa')
+    }
     _handleLogin = () => {
         startMainTabs()
     }
@@ -45,9 +49,12 @@ class AuthScreen extends Component {
                     <MainText>
                         <HeadingText>Please Log In</HeadingText>
                     </MainText>
-                    <Button
-                        title="Switch to Login"
-                    />
+                    <RaisedButton
+                        color="#29AAF4"
+                        onPress={ this._handleSwitchLogin }
+                    >
+                        Switch to Login
+                    </RaisedButton>
                     <GlamInputContainer>
                         <GlamEmailContainer
                             placeholder="Your email Address"
@@ -59,10 +66,12 @@ class AuthScreen extends Component {
                             placeholder="Confirm Password"
                         />
                     </GlamInputContainer>
-                    <Button
+                    <RaisedButton
+                        color="#29AAF4"
                         onPress={ this._handleLogin }
-                        title="Submit"
-                    />
+                    >
+                        Submit
+                    </RaisedButton>
                 </GlamAuthContainer>
             </GlamImageBackground>
         )
