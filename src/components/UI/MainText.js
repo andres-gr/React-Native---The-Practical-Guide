@@ -4,7 +4,8 @@ import { StyleSheet, Text } from 'react-native'
 
 const styles = StyleSheet.create({
     text: {
-        color: '#000'
+        color           : '#000',
+        backgroundColor : 'transparent'
     }
 })
 
