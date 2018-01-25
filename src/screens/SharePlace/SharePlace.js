@@ -1,34 +1,22 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Image, ScrollView, Text, View } from 'react-native'
+import { Button, ScrollView, View } from 'react-native'
 import addPlace from '../../decorators/addPlace'
 import sideDrawerToggle from '../../utils/helpers/sideDrawerToggle'
 import glamFactory from '../../utils/styles/glamFactory'
-import DefaultInput from '../../components/UI/DefaultInput'
 import MainText from '../../components/UI/MainText'
 import HeadingText from '../../components/UI/HeadingText'
-import image0 from '../../assets/images/image0.jpg'
+import PlaceInput from '../../components/PlaceInput/PlaceInput'
+import PickImage from '../../components/PickImage/PickImage'
+import PickLocation from '../../components/PickLocation/PickLocation'
 
 const GlamScrollContainer = glamFactory(View, 'GlamScrollContainer', {
     alignItems  : 'center',
     flex        : 1
 })
 
-const GlamPlaceholder = glamFactory(View, 'GlamPlaceholder', {
-    backgroundColor : '#EEE',
-    borderColor     : '#000',
-    borderWidth     : 1,
-    height          : 150,
-    width           : '80%'
-})
-
 const GlamButtonContainer = glamFactory(View, 'GlamButtonContainer', {
     margin: 8
-})
-
-const GlamImagePlacholder = glamFactory(Image, 'GlamImagePlacholder', {
-    height  : '100%',
-    width   : '100%'
 })
 
 @addPlace
@@ -41,8 +29,16 @@ class SharePlaceScreen extends PureComponent {
         super(props)
         props.navigator.addOnNavigatorEvent(sideDrawerToggle.bind(this, { side: 'left' }))
     }
-    _handlePlaceAdded = val => {
-        this.props.addPlace(val)
+    state = {
+        placeName: ''
+    }
+    _handleChangeText = placeName => {
+        this.setState({ placeName })
+    }
+    _handlePlaceAdded = () => {
+        if (this.state.placeName.trim() !== '') {
+            this.props.addPlace(this.state.placeName)
+        }
     }
     render () {
         return (
@@ -51,21 +47,17 @@ class SharePlaceScreen extends PureComponent {
                     <MainText>
                         <HeadingText>Share a place with us!</HeadingText>
                     </MainText>
-                    <GlamPlaceholder>
-                        <GlamImagePlacholder source={ image0 } />
-                    </GlamPlaceholder>
+                    <PickImage />
+                    <PickLocation />
+                    <PlaceInput
+                        onChangeText={ this._handleChangeText }
+                        value={ this.state.placeName }
+                    />
                     <GlamButtonContainer>
-                        <Button title="Pick image" />
-                    </GlamButtonContainer>
-                    <GlamPlaceholder>
-                        <Text>Map!</Text>
-                    </GlamPlaceholder>
-                    <GlamButtonContainer>
-                        <Button title="Locate me" />
-                    </GlamButtonContainer>
-                    <DefaultInput placeholder="Place name" />
-                    <GlamButtonContainer>
-                        <Button title="Share the place" />
+                        <Button
+                            onPress={ this._handlePlaceAdded }
+                            title="Share the place"
+                        />
                     </GlamButtonContainer>
                 </GlamScrollContainer>
             </ScrollView>

@@ -1,63 +1,25 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import {
-    Button,
-    TextInput,
-    View
-} from 'react-native'
-import glamFactory from '../../utils/styles/glamFactory'
+import DefaultInput from '../UI/DefaultInput'
 
-const GlamInputContainer = glamFactory(View, 'GlamInputContainer', {
-    alignItems      : 'center',
-    flexDirection   : 'row',
-    justifyContent  : 'space-around',
-    width           : '100%'
-})
+const PlaceInput = ({
+    onChangeText,
+    value
+}) => (
+    <DefaultInput
+        onChangeText={ onChangeText }
+        placeholder="Place Name"
+        value={ value }
+    />
+)
 
-const GlamTextInput = glamFactory(TextInput, 'GlamInputContainer', {
-    width: '70%'
-})
+PlaceInput.propTypes = {
+    onChangeText    : PropTypes.func.isRequired,
+    value           : PropTypes.string
+}
 
-const GlamButton = glamFactory(Button, 'GlamButton', {
-    width: '30%'
-})
-
-class PlaceInput extends PureComponent {
-    static propTypes = {
-        pressEvent      : PropTypes.func.isRequired,
-        placeholder     : PropTypes.string.isRequired,
-        title           : PropTypes.string.isRequired
-    }
-    state = {
-        placeName: ''
-    }
-    _handleChangeText = placeName => {
-        this.setState({ placeName })
-    }
-    _handleBtnPress = () => {
-        if (this.state.placeName.trim() === '') {
-            return
-        }
-        this.props.pressEvent(this.state.placeName)
-    }
-    render () {
-        const {
-            placeholder,
-            title
-        } = this.props
-        return (
-            <GlamInputContainer>
-                <GlamTextInput
-                    onChangeText={ this._handleChangeText }
-                    placeholder={ placeholder }
-                />
-                <GlamButton
-                    onPress={ this._handleBtnPress }
-                    title={ title }
-                />
-            </GlamInputContainer>
-        )
-    }
+PlaceInput.defaultProps = {
+    value: ''
 }
 
 export default PlaceInput
