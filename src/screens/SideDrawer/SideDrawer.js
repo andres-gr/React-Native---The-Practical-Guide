@@ -1,18 +1,39 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
-import { Dimensions, Text, View } from 'react-native'
+import { Dimensions, Text, TouchableOpacity, View } from 'react-native'
+import Icon from 'react-native-vector-icons/Ionicons'
 import glamFactory from '../../utils/styles/glamFactory'
 
 const GlamSideContainer = glamFactory(View, 'GlamSideContainer', {
     backgroundColor : '#FFF',
     flex            : 1,
-    paddingTop      : 22,
+    paddingTop      : 50,
     width           : Dimensions.get('window').width * 0.85
+})
+
+const GlamDrawerItem = glamFactory(View, 'GlamDrawerItem', {
+    alignItems      : 'center',
+    backgroundColor : '#EEE',
+    flexDirection   : 'row',
+    padding         : 10
+})
+
+const GlamItemIcon = glamFactory(Icon, 'GlamItemIcon', {
+    marginRight: 10
 })
 
 const SideDrawer = () => (
     <GlamSideContainer>
-        <Text>Side cosa</Text>
+        <TouchableOpacity>
+            <GlamDrawerItem>
+                <GlamItemIcon
+                    color="#AAA"
+                    name="ios-log-out"
+                    size={ 30 }
+                />
+                <Text>Sign Out</Text>
+            </GlamDrawerItem>
+        </TouchableOpacity>
     </GlamSideContainer>
 )
 
