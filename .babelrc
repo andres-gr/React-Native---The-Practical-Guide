@@ -1,16 +1,11 @@
 {
     "presets": ["react-native"],
     "plugins": [
-        ["babel-plugin-inline-import-graphql-ast", {
-            "extensions": [
-                ".gql",
-                ".graphql",
-                ".graphqls"
-            ]
-        }],
-        "babel-plugin-syntax-decorators",
+        "babel-plugin-inline-import-graphql-ast",
         "babel-plugin-transform-decorators-legacy",
         "babel-plugin-transform-decorators",
-        "babel-plugin-transform-do-expressions"
+        "babel-plugin-transform-class-properties",
+        "babel-plugin-transform-do-expressions",
+        "babel-plugin-styled-components"
     ]
 }
