@@ -1,8 +1,10 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
-import { Dimensions, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import glamFactory from '../../utils/styles/glamFactory'
+
+const logOutIcon = Platform.OS === 'android' ? 'md-log-out' : 'ios-log-out'
 
 const GlamSideContainer = glamFactory(View, 'GlamSideContainer', {
     backgroundColor : '#FFF',
@@ -28,7 +30,7 @@ const SideDrawer = () => (
             <GlamDrawerItem>
                 <GlamItemIcon
                     color="#AAA"
-                    name="ios-log-out"
+                    name={ logOutIcon }
                     size={ 30 }
                 />
                 <Text>Sign Out</Text>

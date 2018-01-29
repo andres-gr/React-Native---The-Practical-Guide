@@ -2,6 +2,7 @@ import React, { Fragment, PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import {
     Image,
+    Platform,
     Text,
     TouchableOpacity,
     View
@@ -9,6 +10,8 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons'
 import glamFactory from '../../utils/styles/glamFactory'
 import deletePlace from '../../decorators/deletePlace'
+
+const trashIcon = Platform.OS === 'android' ? 'md-trash' : 'ios-trash'
 
 const GlamDetailContainer = glamFactory(View, 'GlamDetailContainer', {
     margin: 22
@@ -72,7 +75,7 @@ class PlaceDetail extends PureComponent {
                     >
                         <GlamDeleteBtn>
                             <Icon
-                                name="ios-trash"
+                                name={ trashIcon }
                                 size={ 30 }
                                 color="red"
                             />

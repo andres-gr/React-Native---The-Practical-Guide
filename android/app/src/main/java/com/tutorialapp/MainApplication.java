@@ -34,6 +34,7 @@ public class MainApplication extends NavigationApplication {
     public List<ReactPackage> createAdditionalReactPackages() {
         return getPackages();
     }
+    
     @Override
     public String getJSMainModuleName() {
         return "index";
