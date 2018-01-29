@@ -2,6 +2,10 @@ import { Platform } from 'react-native'
 import { Navigation } from 'react-native-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
 
+const navigatorStyle = {
+    navBarButtonColor: 'orange'
+}
+
 const startMainTabs = async () => {
     const [
         mapImage,
@@ -27,7 +31,8 @@ const startMainTabs = async () => {
                             title   : 'Menu'
                         }
                     ]
-                }
+                },
+                navigatorStyle
             },
             {
                 icon                : shareImage,
@@ -42,13 +47,20 @@ const startMainTabs = async () => {
                             title   : 'Menu'
                         }
                     ]
-                }
+                },
+                navigatorStyle
             }
         ],
+        tabsStyle: {
+            tabBarSelectedButtonColor: 'orange'
+        },
         drawer: {
             left: {
                 screen: 'tuto.SideDrawer'
             }
+        },
+        appStyle: {
+            tabBarSelectedButtonColor: 'orange'
         }
     })
 }

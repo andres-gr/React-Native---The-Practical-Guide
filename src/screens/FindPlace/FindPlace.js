@@ -22,8 +22,11 @@ class FindPlaceScreen extends PureComponent {
             passProps       : {
                 selectedPlace
             },
-            screen      : 'tuto.PlaceDetailScreen',
-            title       : selectedPlace.name
+            screen         : 'tuto.PlaceDetailScreen',
+            title          : selectedPlace.name,
+            navigatorStyle : {
+                navBarButtonColor: 'orange'
+            }
         })
     }
     render () {
