@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import { Button, Image, View } from 'react-native'
 import glamFactory from '../../utils/styles/glamFactory'
 import image0 from '../../assets/images/image0.jpg'
@@ -23,6 +23,9 @@ const GlamButtonContainer = glamFactory(View, 'GlamButtonContainer', {
 
 class PickImage extends PureComponent {
     static propTypes = {}
+    _handlePress = () => {
+        console.log('press pick image')
+    }
     render () {
         return (
             <Fragment>
@@ -30,7 +33,10 @@ class PickImage extends PureComponent {
                     <GlamImagePlacholder source={ image0 } />
                 </GlamPlaceholder>
                 <GlamButtonContainer>
-                    <Button title="Pick image" />
+                    <Button
+                        onPress={ this._handlePress }
+                        title="Pick image"
+                    />
                 </GlamButtonContainer>
             </Fragment>
         )

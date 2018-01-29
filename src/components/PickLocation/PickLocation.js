@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react'
-import PropTypes from 'prop-types'
-import { Button, Image, View, Text } from 'react-native'
+// import PropTypes from 'prop-types'
+import { Button, View, Text } from 'react-native'
 import glamFactory from '../../utils/styles/glamFactory'
 
 const GlamPlaceholder = glamFactory(View, 'GlamPlaceholder', {
@@ -17,6 +17,9 @@ const GlamButtonContainer = glamFactory(View, 'GlamButtonContainer', {
 
 class PickLocation extends PureComponent {
     static propTypes = {}
+    _handlePress = () => {
+        console.log('press locate me')
+    }
     render () {
         return (
             <Fragment>
@@ -24,7 +27,10 @@ class PickLocation extends PureComponent {
                     <Text>Map!</Text>
                 </GlamPlaceholder>
                 <GlamButtonContainer>
-                    <Button title="Locate me" />
+                    <Button
+                        onPress={ this._handlePress }
+                        title="Locate me"
+                    />
                 </GlamButtonContainer>
             </Fragment>
         )
