@@ -31,13 +31,13 @@ const inputStyles = {
 
 const GlamEmailContainer = glamFactory(DefaultInput, 'GlamEmailContainer', inputStyles)
 
-const GlamPasswordContainer = glamFactory(View, 'GlamPasswordContainer', {}, ({ windowHeight }) => ({
-    flexDirection  : windowHeight > 500 ? 'column' : 'row',
-    justifyContent : windowHeight > 500 ? 'flex-start' : 'space-between'
+const GlamPasswordContainer = glamFactory(View, 'GlamPasswordContainer', {}, ({ viewMode }) => ({
+    flexDirection  : viewMode === 'portrait' ? 'column' : 'row',
+    justifyContent : viewMode === 'portrait' ? 'flex-start' : 'space-between'
 }))
 
-const GlamPasswordWrapper = glamFactory(View, 'GlamPasswordWrapper', {}, ({ windowHeight }) => ({
-    width: windowHeight > 500 ? '100%' : '45%'
+const GlamPasswordWrapper = glamFactory(View, 'GlamPasswordWrapper', {}, ({ viewMode }) => ({
+    width: viewMode === 'portrait' ? '100%' : '45%'
 }))
 
 const GlamPasswordInput = glamFactory(DefaultInput, 'GlamPasswordInput', inputStyles)
@@ -50,11 +50,14 @@ class AuthScreen extends Component {
         Dimensions.addEventListener('change', this._handleOrientationChange)
     }
     state = {
-        windowHeight: Dimensions.get('window').height
+        viewMode: Dimensions.get('window').height > 500 ? 'portrait' : 'landscape'
+    }
+    componentWillUnmount () {
+        Dimensions.removeEventListener('change', this._handleOrientationChange)
     }
     _handleOrientationChange = dimensions => {
         const { window: { height } } = dimensions
-        this.setState({ windowHeight: height })
+        this.setState({ viewMode: height > 500 ? 'portrait' : 'landscape' })
     }
     _handleSwitchLogin = () => {
         alert('Cosa')
@@ -66,7 +69,7 @@ class AuthScreen extends Component {
         return (
             <GlamImageBackground source={ backgroundImage }>
                 <GlamAuthContainer>
-                    { this.state.windowHeight > 500
+                    { this.state.viewMode === 'portrait'
                         ? (
                             <MainText>
                                 <HeadingText>Please Log In</HeadingText>
@@ -85,17 +88,17 @@ class AuthScreen extends Component {
                             placeholder="Your email Address"
                         />
                         <GlamPasswordContainer
-                            windowHeight={ this.state.windowHeight }
+                            viewMode={ this.state.viewMode }
                         >
                             <GlamPasswordWrapper
-                                windowHeight={ this.state.windowHeight }
+                                viewMode={ this.state.viewMode }
                             >
                                 <GlamPasswordInput
                                     placeholder="Password"
                                 />
                             </GlamPasswordWrapper>
                             <GlamPasswordWrapper
-                                windowHeight={ this.state.windowHeight }
+                                viewMode={ this.state.viewMode }
                             >
                                 <GlamConfirmInput
                                     placeholder="Confirm Password"
