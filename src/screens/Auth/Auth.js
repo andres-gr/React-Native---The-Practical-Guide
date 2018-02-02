@@ -29,7 +29,7 @@ const inputStyles = {
     borderColor     : '#BBB'
 }
 
-const GlamEmailContainer = glamFactory(DefaultInput, 'GlamEmailContainer', inputStyles)
+const GlamEmailInput = glamFactory(DefaultInput, 'GlamEmailInput', inputStyles)
 
 const GlamPasswordContainer = glamFactory(View, 'GlamPasswordContainer', {}, ({ viewMode }) => ({
     flexDirection  : viewMode === 'portrait' ? 'column' : 'row',
@@ -50,10 +50,53 @@ class AuthScreen extends Component {
         Dimensions.addEventListener('change', this._handleOrientationChange)
     }
     state = {
+        controls: {
+            email: {
+                value           : '',
+                valid           : false,
+                validationRules : {
+                    isEmail: true
+                }
+            },
+            password: {
+                value           : '',
+                valid           : false,
+                validationRules : {
+                    minLength: 6
+                }
+            },
+            confirmPassword: {
+                value           : '',
+                valid           : false,
+                validationRules : {
+                    equalTo: 'password'
+                }
+            }
+        },
         viewMode: Dimensions.get('window').height > 500 ? 'portrait' : 'landscape'
     }
     componentWillUnmount () {
         Dimensions.removeEventListener('change', this._handleOrientationChange)
+    }
+    _handleChangeText = (key, value) => {
+        this.setState(prevState => ({
+            controls: {
+                ...prevState.controls,
+                [key]: {
+                    ...prevState.controls[key],
+                    value
+                }
+            }
+        }))
+    }
+    _handleChangeEmail = value => {
+        this._handleChangeText('email', value)
+    }
+    _handleChangePassword = value => {
+        this._handleChangeText('password', value)
+    }
+    _handleChangeConfirmPassword = value => {
+        this._handleChangeText('confirmPassword', value)
     }
     _handleOrientationChange = dimensions => {
         const { window: { height } } = dimensions
@@ -84,8 +127,10 @@ class AuthScreen extends Component {
                         Switch to Login
                     </RaisedButton>
                     <GlamInputContainer>
-                        <GlamEmailContainer
+                        <GlamEmailInput
+                            onChangeText={ this._handleChangeEmail }
                             placeholder="Your email Address"
+                            value={ this.state.controls.email.value }
                         />
                         <GlamPasswordContainer
                             viewMode={ this.state.viewMode }
@@ -94,14 +139,18 @@ class AuthScreen extends Component {
                                 viewMode={ this.state.viewMode }
                             >
                                 <GlamPasswordInput
+                                    onChangeText={ this._handleChangePassword }
                                     placeholder="Password"
+                                    value={ this.state.controls.password.value }
                                 />
                             </GlamPasswordWrapper>
                             <GlamPasswordWrapper
                                 viewMode={ this.state.viewMode }
                             >
                                 <GlamConfirmInput
+                                    onChangeText={ this._handleChangeConfirmPassword }
                                     placeholder="Confirm Password"
+                                    value={ this.state.controls.confirmPassword.value }
                                 />
                             </GlamPasswordWrapper>
                         </GlamPasswordContainer>
