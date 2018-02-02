@@ -38,7 +38,8 @@ class FindPlaceScreen extends PureComponent {
     }
     state = {
         loaded         : false,
-        removeAnimated : new Animated.Value(1)
+        removeAnimated : new Animated.Value(1),
+        listAnimated   : new Animated.Value(0)
     }
     _handleItemPress = key => {
         const selectedPlace = this.props.places.find(place => place.key === key)
@@ -61,7 +62,15 @@ class FindPlaceScreen extends PureComponent {
             useNativeDriver : true
         }).start(() => {
             this.setState({ loaded: true })
+            this._handleListLoad()
         })
+    }
+    _handleListLoad = () => {
+        Animated.timing(this.state.listAnimated, {
+            duration        : 750,
+            toValue         : 1,
+            useNativeDriver : true
+        }).start()
     }
     opacityAnimatedProps = {
         opacity   : this.state.removeAnimated,
@@ -74,6 +83,9 @@ class FindPlaceScreen extends PureComponent {
             }
         ]
     }
+    animatedListProps = {
+        opacity: this.state.listAnimated
+    }
     render () {
         return (
             <GlamFindPlaceContainer
@@ -81,10 +93,15 @@ class FindPlaceScreen extends PureComponent {
             >
                 { this.state.loaded
                     ? (
-                        <List
-                            pressEvent={ this._handleItemPress }
-                            places={ this.props.places }
-                        />
+                        <GlamAnimated
+                            { ...this.animatedListProps }
+                            width="100%"
+                        >
+                            <List
+                                pressEvent={ this._handleItemPress }
+                                places={ this.props.places }
+                            />
+                        </GlamAnimated>
                     )
                     : (
                         <GlamAnimated

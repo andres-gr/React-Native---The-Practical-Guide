@@ -1,26 +1,17 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { Animated, FlatList } from 'react-native'
+import { FlatList } from 'react-native'
+import glamFactory from '../../utils/styles/glamFactory'
 import ListItem from '../ListItem/ListItem'
-import GlamAnimated from '../Animated/Animated'
+
+const GlamList = glamFactory(FlatList, 'GlamList', {
+    width: '100%'
+})
 
 class List extends PureComponent {
     static propTypes = {
         pressEvent  : PropTypes.func.isRequired,
         places      : PropTypes.arrayOf(PropTypes.object).isRequired
-    }
-    state = {
-        removeAnimated: new Animated.Value(1)
-    }
-    componentDidMount () {
-        Animated.timing(this.state.removeAnimated, {
-            duration        : 500,
-            toValue         : 0,
-            useNativeDriver : true
-        })
-    }
-    animatedProps = {
-        opacity: this.state.removeAnimated
     }
     renderItem = ({ item }) => (
         <ListItem
@@ -32,15 +23,10 @@ class List extends PureComponent {
     )
     render () {
         return (
-            <GlamAnimated
-                { ...this.animatedProps }
-                width="100%"
-            >
-                <FlatList
-                    data={ this.props.places }
-                    renderItem={ this.renderItem }
-                />
-            </GlamAnimated>
+            <GlamList
+                data={ this.props.places }
+                renderItem={ this.renderItem }
+            />
         )
     }
 }
