@@ -5,8 +5,7 @@ import glamFactory from '../../utils/styles/glamFactory'
 import List from '../../components/List/List'
 import withCurrentPlaces from '../../decorators/withCurrentPlaces'
 import sideDrawerToggle from '../../utils/helpers/sideDrawerToggle'
-
-const { View: AnimView } = Animated
+import GlamAnimated from '../../components/Animated/Animated'
 
 const GlamFindPlaceContainer = glamFactory(View, 'GlamFindPlaceContainer', {}, ({ loaded }) => ({
     alignItems     : loaded ? 'flex-start' : 'center',
@@ -26,10 +25,6 @@ const GlamSearchText = glamFactory(Text, 'GlamSearchText', {
     fontSize   : 26,
     fontWeight : 'bold'
 })
-
-const GlamAnimated = glamFactory(AnimView, 'GlamAnimated')
-
-GlamAnimated.propsAreStyleOverrides = true
 
 @withCurrentPlaces
 class FindPlaceScreen extends PureComponent {
@@ -64,7 +59,9 @@ class FindPlaceScreen extends PureComponent {
             duration        : 500,
             toValue         : 0,
             useNativeDriver : true
-        }).start()
+        }).start(() => {
+            this.setState({ loaded: true })
+        })
     }
     opacityAnimatedProps = {
         opacity   : this.state.removeAnimated,
