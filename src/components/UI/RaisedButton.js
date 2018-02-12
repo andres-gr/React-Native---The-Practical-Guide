@@ -19,11 +19,12 @@ class RaisedButton extends PureComponent {
             PropTypes.object,
             PropTypes.string
         ]).isRequired,
-        color: PropTypes.string
+        color    : PropTypes.string,
+        disabled : PropTypes.bool
     }
-
     static defaultProps = {
-        color: null
+        color    : null,
+        disabled : false
     }
     getButtonContent = () => (
         <View style={ [styles.button, { backgroundColor: this.props.color }] }>
@@ -33,13 +34,13 @@ class RaisedButton extends PureComponent {
     render () {
         if (Platform.OS === 'android') {
             return (
-                <TouchableNativeFeedback onPress={ this.props.onPress }>
+                <TouchableNativeFeedback onPress={ !this.props.disabled ? this.props.onPress : null }>
                     { this.getButtonContent() }
                 </TouchableNativeFeedback>
             )
         }
         return (
-            <TouchableOpacity onPress={ this.props.onPress }>
+            <TouchableOpacity onPress={ !this.props.disabled ? this.props.onPress : null }>
                 { this.getButtonContent() }
             </TouchableOpacity>
         )

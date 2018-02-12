@@ -7,6 +7,10 @@ import HeadingText from '../../components/UI/HeadingText'
 import MainText from '../../components/UI/MainText'
 import backgroundImage from '../../assets/images/background.jpg'
 import RaisedButton from '../../components/UI/RaisedButton'
+import Validator from '../../utils/validation/validator'
+import authConstraints from '../../utils/validation/auth'
+
+const authValidator = new Validator(authConstraints)
 
 const GlamAuthContainer = glamFactory(View, 'GlamAuthContainer', {
     alignItems      : 'center',
@@ -51,43 +55,51 @@ class AuthScreen extends Component {
     }
     state = {
         controls: {
-            email: {
-                value           : '',
-                valid           : false,
-                validationRules : {
-                    isEmail: true
-                }
-            },
-            password: {
-                value           : '',
-                valid           : false,
-                validationRules : {
-                    minLength: 6
-                }
-            },
-            confirmPassword: {
-                value           : '',
-                valid           : false,
-                validationRules : {
-                    equalTo: 'password'
-                }
-            }
+            email           : '',
+            password        : '',
+            confirmPassword : ''
         },
-        viewMode: Dimensions.get('window').height > 500 ? 'portrait' : 'landscape'
+        valid: {
+            email           : false,
+            password        : false,
+            confirmPassword : false
+        },
+        isValid  : false,
+        viewMode : Dimensions.get('window').height > 500 ? 'portrait' : 'landscape'
     }
     componentWillUnmount () {
         Dimensions.removeEventListener('change', this._handleOrientationChange)
     }
     _handleChangeText = (key, value) => {
-        this.setState(prevState => ({
-            controls: {
-                ...prevState.controls,
-                [key]: {
-                    ...prevState.controls[key],
-                    value
-                }
+        this.setState(prevState => {
+            const controls = {
+                [key]: value.trim()
             }
-        }))
+            if (key === 'confirmPassword') {
+                controls.password = prevState.controls.password
+            }
+            if (key === 'password') {
+                controls.confirmPassword = prevState.controls.confirmPassword
+            }
+            authValidator.check(controls)
+            const valid = authValidator.getValid()
+            authValidator.check({
+                ...prevState.controls,
+                ...controls
+            })
+            const isValid = authValidator.isValid()
+            return {
+                controls: {
+                    ...prevState.controls,
+                    ...controls
+                },
+                valid: {
+                    ...prevState.valid,
+                    ...valid
+                },
+                isValid
+            }
+        })
     }
     _handleChangeEmail = value => {
         this._handleChangeText('email', value)
@@ -106,7 +118,13 @@ class AuthScreen extends Component {
         alert('Cosa')
     }
     _handleLogin = () => {
-        startMainTabs()
+        authValidator.check(this.state.controls)
+        const valid = authValidator.isValid()
+        if (valid) {
+            startMainTabs()
+        } else {
+            alert(authValidator.getError())
+        }
     }
     render () {
         return (
@@ -128,9 +146,10 @@ class AuthScreen extends Component {
                     </RaisedButton>
                     <GlamInputContainer>
                         <GlamEmailInput
+                            isValid={ this.state.valid.email }
                             onChangeText={ this._handleChangeEmail }
                             placeholder="Your email Address"
-                            value={ this.state.controls.email.value }
+                            value={ this.state.controls.email }
                         />
                         <GlamPasswordContainer
                             viewMode={ this.state.viewMode }
@@ -139,24 +158,27 @@ class AuthScreen extends Component {
                                 viewMode={ this.state.viewMode }
                             >
                                 <GlamPasswordInput
+                                    isValid={ this.state.valid.password }
                                     onChangeText={ this._handleChangePassword }
                                     placeholder="Password"
-                                    value={ this.state.controls.password.value }
+                                    value={ this.state.controls.password }
                                 />
                             </GlamPasswordWrapper>
                             <GlamPasswordWrapper
                                 viewMode={ this.state.viewMode }
                             >
                                 <GlamConfirmInput
+                                    isValid={ this.state.valid.confirmPassword }
                                     onChangeText={ this._handleChangeConfirmPassword }
                                     placeholder="Confirm Password"
-                                    value={ this.state.controls.confirmPassword.value }
+                                    value={ this.state.controls.confirmPassword }
                                 />
                             </GlamPasswordWrapper>
                         </GlamPasswordContainer>
                     </GlamInputContainer>
                     <RaisedButton
                         color="#29AAF4"
+                        disabled={ !this.state.isValid }
                         onPress={ this._handleLogin }
                     >
                         Submit
