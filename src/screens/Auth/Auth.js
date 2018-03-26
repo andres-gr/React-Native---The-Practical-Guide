@@ -148,7 +148,11 @@ class AuthScreen extends Component {
     }
     _handleSwitchLogin = () => {
         this.setState(prevState => ({
-            isLogin: !prevState.isLogin
+            isLogin  : !prevState.isLogin,
+            controls : {
+                ...prevState.controls,
+                confirmPassword: ''
+            }
         }))
     }
     _handleLogin = () => {
@@ -182,7 +186,10 @@ class AuthScreen extends Component {
                     </RaisedButton>
                     <GlamInputContainer>
                         <GlamEmailInput
+                            autoCapitalize="none"
+                            autoCorrect={ false }
                             isValid={ this.state.valid.email }
+                            keyboardType="email-address"
                             onChangeText={ this._handleChangeEmail }
                             placeholder="Your email Address"
                             touched={ this.state.touched.email }
@@ -198,6 +205,7 @@ class AuthScreen extends Component {
                                     isValid={ this.state.valid.password }
                                     onChangeText={ this._handleChangePassword }
                                     placeholder="Password"
+                                    secureTextEntry
                                     touched={ this.state.touched.password }
                                     value={ this.state.controls.password }
                                 />
@@ -210,6 +218,7 @@ class AuthScreen extends Component {
                                         isValid={ this.state.valid.confirmPassword }
                                         onChangeText={ this._handleChangeConfirmPassword }
                                         placeholder="Confirm Password"
+                                        secureTextEntry
                                         touched={ this.state.touched.confirmPassword }
                                         value={ this.state.controls.confirmPassword }
                                     />
