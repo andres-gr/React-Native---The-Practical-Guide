@@ -24,7 +24,10 @@ class RaisedButton extends PureComponent {
         onPress     : PropTypes.func.isRequired,
         children    : PropTypes.oneOfType([
             PropTypes.object,
-            PropTypes.string
+            PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.arrayOf(PropTypes.string)
+            ])
         ]).isRequired,
         color    : PropTypes.string,
         disabled : PropTypes.bool

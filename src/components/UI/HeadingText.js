@@ -19,8 +19,11 @@ const HeadingText = props => (
 )
 
 HeadingText.propTypes = {
-    children    : PropTypes.string.isRequired,
-    style       : PropTypes.object
+    children: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.string)
+    ]).isRequired,
+    style: PropTypes.object
 }
 
 HeadingText.defaultProps = {

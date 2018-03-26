@@ -86,6 +86,7 @@ class AuthScreen extends Component {
             confirmPassword : false
         },
         isValid  : false,
+        isLogin  : true,
         viewMode : Dimensions.get('window').height > 500 ? 'portrait' : 'landscape'
     }
     componentDidMount () {
@@ -104,6 +105,9 @@ class AuthScreen extends Component {
             }
             if (key === 'password') {
                 controls.confirmPassword = prevState.controls.confirmPassword
+                if (this.state.isLogin) {
+                    controls.confirmPassword = value.trim()
+                }
             }
             authValidator.check(controls)
             const valid = authValidator.getValid()
@@ -143,7 +147,9 @@ class AuthScreen extends Component {
         this.setState({ viewMode: height > 500 ? 'portrait' : 'landscape' })
     }
     _handleSwitchLogin = () => {
-        alert('Cosa')
+        this.setState(prevState => ({
+            isLogin: !prevState.isLogin
+        }))
     }
     _handleLogin = () => {
         authValidator.check(this.state.controls)
@@ -156,13 +162,14 @@ class AuthScreen extends Component {
         }
     }
     render () {
+        const viewMode = this.state.isLogin ? 'portrait' : this.state.viewMode
         return (
             <GlamImageBackground source={ backgroundImage }>
                 <GlamAuthContainer>
                     { this.state.viewMode === 'portrait'
                         ? (
                             <MainText>
-                                <HeadingText>Please Log In</HeadingText>
+                                <HeadingText>Please { this.state.isLogin ? 'Log In' : 'Sign Up' }</HeadingText>
                             </MainText>
                         )
                         : null
@@ -171,7 +178,7 @@ class AuthScreen extends Component {
                         color="#29AAF4"
                         onPress={ this._handleSwitchLogin }
                     >
-                        Switch to Login
+                        Switch to { this.state.isLogin ? 'Sign Up' : 'Login' }
                     </RaisedButton>
                     <GlamInputContainer>
                         <GlamEmailInput
@@ -182,10 +189,10 @@ class AuthScreen extends Component {
                             value={ this.state.controls.email }
                         />
                         <GlamPasswordContainer
-                            viewMode={ this.state.viewMode }
+                            viewMode={ viewMode }
                         >
                             <GlamPasswordWrapper
-                                viewMode={ this.state.viewMode }
+                                viewMode={ viewMode }
                             >
                                 <GlamPasswordInput
                                     isValid={ this.state.valid.password }
@@ -195,17 +202,19 @@ class AuthScreen extends Component {
                                     value={ this.state.controls.password }
                                 />
                             </GlamPasswordWrapper>
-                            <GlamPasswordWrapper
-                                viewMode={ this.state.viewMode }
-                            >
-                                <GlamConfirmInput
-                                    isValid={ this.state.valid.confirmPassword }
-                                    onChangeText={ this._handleChangeConfirmPassword }
-                                    placeholder="Confirm Password"
-                                    touched={ this.state.touched.confirmPassword }
-                                    value={ this.state.controls.confirmPassword }
-                                />
-                            </GlamPasswordWrapper>
+                            { !this.state.isLogin && (
+                                <GlamPasswordWrapper
+                                    viewMode={ viewMode }
+                                >
+                                    <GlamConfirmInput
+                                        isValid={ this.state.valid.confirmPassword }
+                                        onChangeText={ this._handleChangeConfirmPassword }
+                                        placeholder="Confirm Password"
+                                        touched={ this.state.touched.confirmPassword }
+                                        value={ this.state.controls.confirmPassword }
+                                    />
+                                </GlamPasswordWrapper>
+                            ) }
                         </GlamPasswordContainer>
                     </GlamInputContainer>
                     <RaisedButton
