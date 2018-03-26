@@ -9,6 +9,7 @@ import HeadingText from '../../components/UI/HeadingText'
 import PlaceInput from '../../components/PlaceInput/PlaceInput'
 import PickImage from '../../components/PickImage/PickImage'
 import PickLocation from '../../components/PickLocation/PickLocation'
+import placesSchema from '../../utils/validation/places'
 
 const GlamScrollContainer = glamFactory(View, 'GlamScrollContainer', {
     alignItems  : 'center',
@@ -30,14 +31,17 @@ class SharePlaceScreen extends PureComponent {
         props.navigator.addOnNavigatorEvent(sideDrawerToggle.bind(this, { side: 'left' }))
     }
     state = {
-        placeName: ''
+        placeName : '',
+        isValid   : false
     }
-    _handleChangeText = placeName => {
-        this.setState({ placeName })
+    _handleChangeText = async placeName => {
+        const isValid = await placesSchema.isValid({ name: placeName })
+        this.setState({ isValid, placeName })
     }
-    _handlePlaceAdded = () => {
-        if (this.state.placeName.trim() !== '') {
-            this.props.addPlace(this.state.placeName)
+    _handlePlaceAdded = async () => {
+        if (this.state.isValid) {
+            await this.props.addPlace(this.state.placeName)
+            this.setState({ isValid: false, placeName: '' })
         }
     }
     render () {
@@ -55,6 +59,7 @@ class SharePlaceScreen extends PureComponent {
                     />
                     <GlamButtonContainer>
                         <Button
+                            disabled={ !this.state.isValid }
                             onPress={ this._handlePlaceAdded }
                             title="Share the place"
                         />

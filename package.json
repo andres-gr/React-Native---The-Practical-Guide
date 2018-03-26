@@ -41,7 +41,8 @@
         "react-navigation": "^1.5.8",
         "subscriptions-transport-ws": "^0.9.7",
         "twix": "^1.2.0",
-        "validate.js": "^0.12.0"
+        "validate.js": "^0.12.0",
+        "yup": "^0.24.1"
     },
     "devDependencies": {
         "babel-eslint": "^8.2.2",
