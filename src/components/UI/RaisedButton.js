@@ -9,6 +9,13 @@ const styles = StyleSheet.create({
         borderWidth  : 1,
         margin       : 5,
         padding      : 10
+    },
+    disabled: {
+        backgroundColor : '#EEE',
+        borderColor     : '#AAA'
+    },
+    disabledText: {
+        color: '#AAA'
     }
 })
 
@@ -27,11 +34,14 @@ class RaisedButton extends PureComponent {
         disabled : false
     }
     getButtonContent = () => (
-        <View style={ [styles.button, { backgroundColor: this.props.color }] }>
-            <Text>{ this.props.children }</Text>
+        <View style={ [styles.button, { backgroundColor: this.props.color }, this.props.disabled ? styles.disabled : null] }>
+            <Text style={ this.props.disabled ? styles.disabledText : null }>{ this.props.children }</Text>
         </View>
     )
     render () {
+        if (this.props.disabled) {
+            return this.getButtonContent()
+        }
         if (Platform.OS === 'android') {
             return (
                 <TouchableNativeFeedback onPress={ !this.props.disabled ? this.props.onPress : null }>
