@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Dimensions, ImageBackground, View } from 'react-native'
+import SplashScreen from 'react-native-splash-screen'
+import EStyleSheet from 'react-native-extended-stylesheet'
 import startMainTabs from '../MainTabs/startMainTabs'
 import glamFactory from '../../utils/styles/glamFactory'
 import DefaultInput from '../../components/UI/DefaultInput'
@@ -11,6 +13,10 @@ import Validator from '../../utils/validation/validator'
 import authConstraints from '../../utils/validation/auth'
 
 const authValidator = new Validator(authConstraints)
+
+const validInput = ({ isValid, touched }) => ({
+    backgroundColor: !isValid && touched ? '#FF4A4A' : '#EEE'
+})
 
 const GlamAuthContainer = glamFactory(View, 'GlamAuthContainer', {
     alignItems      : 'center',
@@ -33,7 +39,7 @@ const inputStyles = {
     borderColor     : '#BBB'
 }
 
-const GlamEmailInput = glamFactory(DefaultInput, 'GlamEmailInput', inputStyles)
+const GlamEmailInput = glamFactory(DefaultInput, 'GlamEmailInput', inputStyles, validInput)
 
 const GlamPasswordContainer = glamFactory(View, 'GlamPasswordContainer', {}, ({ viewMode }) => ({
     flexDirection  : viewMode === 'portrait' ? 'column' : 'row',
@@ -44,11 +50,17 @@ const GlamPasswordWrapper = glamFactory(View, 'GlamPasswordWrapper', {}, ({ view
     width: viewMode === 'portrait' ? '100%' : '45%'
 }))
 
-const GlamPasswordInput = glamFactory(DefaultInput, 'GlamPasswordInput', inputStyles)
+const GlamPasswordInput = glamFactory(DefaultInput, 'GlamPasswordInput', inputStyles, validInput)
 
-const GlamConfirmInput = glamFactory(DefaultInput, 'GlamConfirmInput', inputStyles)
+const GlamConfirmInput = glamFactory(DefaultInput, 'GlamConfirmInput', inputStyles, validInput)
 
 class AuthScreen extends Component {
+    static navigatorStyle = {
+        statusBarTextColorScheme : 'light',
+        statusBarColor           : EStyleSheet.value('$statusBarColor'),
+        navBarHidden             : true,
+        screenBackgroundColor    : EStyleSheet.value('$statusBarColor')
+    }
     constructor (props) {
         super(props)
         Dimensions.addEventListener('change', this._handleOrientationChange)
@@ -64,8 +76,16 @@ class AuthScreen extends Component {
             password        : false,
             confirmPassword : false
         },
+        touched: {
+            email           : false,
+            password        : false,
+            confirmPassword : false
+        },
         isValid  : false,
         viewMode : Dimensions.get('window').height > 500 ? 'portrait' : 'landscape'
+    }
+    componentDidMount () {
+        SplashScreen.hide()
     }
     componentWillUnmount () {
         Dimensions.removeEventListener('change', this._handleOrientationChange)
@@ -97,7 +117,11 @@ class AuthScreen extends Component {
                     ...prevState.valid,
                     ...valid
                 },
-                isValid
+                isValid,
+                touched: {
+                    ...prevState.touched,
+                    [key]: true
+                }
             }
         })
     }
@@ -149,6 +173,7 @@ class AuthScreen extends Component {
                             isValid={ this.state.valid.email }
                             onChangeText={ this._handleChangeEmail }
                             placeholder="Your email Address"
+                            touched={ this.state.touched.email }
                             value={ this.state.controls.email }
                         />
                         <GlamPasswordContainer
@@ -161,6 +186,7 @@ class AuthScreen extends Component {
                                     isValid={ this.state.valid.password }
                                     onChangeText={ this._handleChangePassword }
                                     placeholder="Password"
+                                    touched={ this.state.touched.password }
                                     value={ this.state.controls.password }
                                 />
                             </GlamPasswordWrapper>
@@ -171,6 +197,7 @@ class AuthScreen extends Component {
                                     isValid={ this.state.valid.confirmPassword }
                                     onChangeText={ this._handleChangeConfirmPassword }
                                     placeholder="Confirm Password"
+                                    touched={ this.state.touched.confirmPassword }
                                     value={ this.state.controls.confirmPassword }
                                 />
                             </GlamPasswordWrapper>
