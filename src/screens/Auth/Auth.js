@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Dimensions, ImageBackground, View } from 'react-native'
+import { Dimensions, ImageBackground, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback, View } from 'react-native'
 import SplashScreen from 'react-native-splash-screen'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import startMainTabs from '../MainTabs/startMainTabs'
@@ -19,7 +19,7 @@ const validInput = ({ isValid, touched }) => ({
     backgroundColor: !isValid && touched ? '#FF4A4A' : '#EEE'
 })
 
-const GlamAuthContainer = glamFactory(View, 'GlamAuthContainer', {
+const GlamAuthContainer = glamFactory(KeyboardAvoidingView, 'GlamAuthContainer', {
     alignItems      : 'center',
     flex            : 1,
     justifyContent  : 'center',
@@ -169,7 +169,7 @@ class AuthScreen extends Component {
         const viewMode = this.state.isLogin ? 'portrait' : this.state.viewMode
         return (
             <GlamImageBackground source={ backgroundImage }>
-                <GlamAuthContainer>
+                <GlamAuthContainer behavior="padding">
                     { this.state.viewMode === 'portrait'
                         ? (
                             <MainText>
@@ -184,48 +184,50 @@ class AuthScreen extends Component {
                     >
                         Switch to { this.state.isLogin ? 'Sign Up' : 'Login' }
                     </RaisedButton>
-                    <GlamInputContainer>
-                        <GlamEmailInput
-                            autoCapitalize="none"
-                            autoCorrect={ false }
-                            isValid={ this.state.valid.email }
-                            keyboardType="email-address"
-                            onChangeText={ this._handleChangeEmail }
-                            placeholder="Your email Address"
-                            touched={ this.state.touched.email }
-                            value={ this.state.controls.email }
-                        />
-                        <GlamPasswordContainer
-                            viewMode={ viewMode }
-                        >
-                            <GlamPasswordWrapper
+                    <TouchableWithoutFeedback onPress={ Keyboard.dismiss }>
+                        <GlamInputContainer>
+                            <GlamEmailInput
+                                autoCapitalize="none"
+                                autoCorrect={ false }
+                                isValid={ this.state.valid.email }
+                                keyboardType="email-address"
+                                onChangeText={ this._handleChangeEmail }
+                                placeholder="Your email Address"
+                                touched={ this.state.touched.email }
+                                value={ this.state.controls.email }
+                            />
+                            <GlamPasswordContainer
                                 viewMode={ viewMode }
                             >
-                                <GlamPasswordInput
-                                    isValid={ this.state.valid.password }
-                                    onChangeText={ this._handleChangePassword }
-                                    placeholder="Password"
-                                    secureTextEntry
-                                    touched={ this.state.touched.password }
-                                    value={ this.state.controls.password }
-                                />
-                            </GlamPasswordWrapper>
-                            { !this.state.isLogin && (
                                 <GlamPasswordWrapper
                                     viewMode={ viewMode }
                                 >
-                                    <GlamConfirmInput
-                                        isValid={ this.state.valid.confirmPassword }
-                                        onChangeText={ this._handleChangeConfirmPassword }
-                                        placeholder="Confirm Password"
+                                    <GlamPasswordInput
+                                        isValid={ this.state.valid.password }
+                                        onChangeText={ this._handleChangePassword }
+                                        placeholder="Password"
                                         secureTextEntry
-                                        touched={ this.state.touched.confirmPassword }
-                                        value={ this.state.controls.confirmPassword }
+                                        touched={ this.state.touched.password }
+                                        value={ this.state.controls.password }
                                     />
                                 </GlamPasswordWrapper>
-                            ) }
-                        </GlamPasswordContainer>
-                    </GlamInputContainer>
+                                { !this.state.isLogin && (
+                                    <GlamPasswordWrapper
+                                        viewMode={ viewMode }
+                                    >
+                                        <GlamConfirmInput
+                                            isValid={ this.state.valid.confirmPassword }
+                                            onChangeText={ this._handleChangeConfirmPassword }
+                                            placeholder="Confirm Password"
+                                            secureTextEntry
+                                            touched={ this.state.touched.confirmPassword }
+                                            value={ this.state.controls.confirmPassword }
+                                        />
+                                    </GlamPasswordWrapper>
+                                ) }
+                            </GlamPasswordContainer>
+                        </GlamInputContainer>
+                    </TouchableWithoutFeedback>
                     <RaisedButton
                         color="#29AAF4"
                         disabled={ !this.state.isValid }
