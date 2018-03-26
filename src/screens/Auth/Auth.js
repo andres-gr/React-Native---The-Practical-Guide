@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Dimensions, ImageBackground, View } from 'react-native'
 import SplashScreen from 'react-native-splash-screen'
 import EStyleSheet from 'react-native-extended-stylesheet'
@@ -60,6 +61,9 @@ class AuthScreen extends Component {
         statusBarColor           : EStyleSheet.value('$statusBarColor'),
         navBarHidden             : true,
         screenBackgroundColor    : EStyleSheet.value('$statusBarColor')
+    }
+    static propTypes = {
+        login: PropTypes.func.isRequired
     }
     constructor (props) {
         super(props)
@@ -145,6 +149,7 @@ class AuthScreen extends Component {
         authValidator.check(this.state.controls)
         const valid = authValidator.isValid()
         if (valid) {
+            this.props.login({ variables: { email: this.state.controls.email, password: this.state.controls.confirmPassword } })
             startMainTabs()
         } else {
             alert(authValidator.getError())

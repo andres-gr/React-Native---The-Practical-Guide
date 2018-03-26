@@ -1,0 +1,9 @@
+mutation LOGIN($email: String!, $password: String) {
+    login(email: $email, password: $password) @client {
+        __typename
+        auth {
+            email
+            password
+        }
+    }
+}

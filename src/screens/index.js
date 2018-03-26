@@ -1,6 +1,6 @@
 import { Navigation } from 'react-native-navigation'
 import withApolloProvider from '../utils/helpers/withApolloProvider'
-import AuthScreen from './Auth/Auth'
+import AuthScreen from '../containers/Auth'
 import FindPlace from './FindPlace/FindPlace'
 import SharePlace from './SharePlace/SharePlace'
 import PlaceDetail from './PlaceDetail/PlaceDetail'

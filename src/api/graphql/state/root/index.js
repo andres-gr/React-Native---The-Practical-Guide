@@ -1,14 +1,17 @@
 import GET_CURRENT_PLACES from './places.graphql'
+import { LOGIN } from './auth.graphql'
 
 let idPlace = 0
 
 const rootState = {
     defaults: {
-        places: []
+        auth   : null,
+        places : []
     },
     resolvers: {
         Query: {
-            places: () => []
+            auth   : () => null,
+            places : () => []
         },
         Mutation: {
             addPlace: (_root, { newPlace }, { cache }) => {
@@ -41,6 +44,23 @@ const rootState = {
                 return {
                     ...data,
                     __typename: 'PlacesState'
+                }
+            },
+            login: (parent, { email, password }, { cache }) => {
+                const data = {
+                    login: {
+                        __typename : 'LoginState',
+                        auth       : {
+                            __typename: 'AuthState',
+                            email,
+                            password
+                        }
+                    }
+                }
+                cache.writeQuery({ data, query: LOGIN })
+                return {
+                    ...data,
+                    __typename: 'LoginState'
                 }
             }
         }
