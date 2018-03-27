@@ -12,10 +12,12 @@
 #import <React/RCTRootView.h>
 #import "SplashScreen.h"
 
+@import GoogleMaps
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [GMSServices provideAPIKey:@"AIzaSyDcYn7CLkde7-TXQHbDMAImxUSRg9jjRHs"];
   NSURL *jsCodeLocation;
 #ifdef DEBUG
   //  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.bundle?platform=ios&dev=true"];

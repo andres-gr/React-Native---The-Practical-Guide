@@ -34,6 +34,7 @@
         "react-apollo": "^2.1.0",
         "react-native": "0.54.2",
         "react-native-extended-stylesheet": "^0.8.1",
+        "react-native-maps": "^0.20.1",
         "react-native-meteor": "^1.2.0",
         "react-native-navigation": "^1.1.412",
         "react-native-splash-screen": "^3.0.6",
