@@ -30,8 +30,22 @@ class PickLocation extends PureComponent {
     setMapRef = el => {
         this.map = el
     }
-    _handlePress = () => {
-        console.dir(this.map)
+    _handleLocatePress = () => {
+        navigator.geolocation.getCurrentPosition(
+            ({ coords: { latitude, longitude } }) => {
+                this._handleMapPress({
+                    nativeEvent: {
+                        coordinate: {
+                            latitude,
+                            longitude
+                        }
+                    }
+                })
+            },
+            err => {
+                console.dir(err)
+            }
+        )
     }
     _handleMapPress = ({ nativeEvent: { coordinate } }) => {
         this.setState(prevState => ({
@@ -66,7 +80,7 @@ class PickLocation extends PureComponent {
                 </MapView>
                 <GlamButtonContainer>
                     <Button
-                        onPress={ this._handlePress }
+                        onPress={ this._handleLocatePress }
                         title="Locate me"
                     />
                 </GlamButtonContainer>
