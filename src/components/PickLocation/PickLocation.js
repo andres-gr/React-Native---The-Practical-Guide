@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react'
 // import PropTypes from 'prop-types'
 import { Button, View, Dimensions } from 'react-native'
-import MapView from 'react-native-maps'
+import MapView, { Marker } from 'react-native-maps'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import glamFactory from '../../utils/styles/glamFactory'
 
@@ -24,7 +24,8 @@ class PickLocation extends PureComponent {
             longitude      : -100.299279,
             latitudeDelta  : 0.0122,
             longitudeDelta : (Dimensions.get('window').width / Dimensions.get('window').height) * 0.0122
-        }
+        },
+        marker: false
     }
     _handlePress = () => {
         console.log('press locate me')
@@ -35,7 +36,8 @@ class PickLocation extends PureComponent {
                 ...prevState.region,
                 latitude  : coordinate.latitude,
                 longitude : coordinate.longitude
-            }
+            },
+            marker: true
         }))
     }
     render () {
@@ -47,7 +49,16 @@ class PickLocation extends PureComponent {
                     provider={ MapView.PROVIDER_GOOGLE }
                     region={ this.state.region }
                     style={ styles.map }
-                />
+                >
+                    { this.state.marker
+                        ? (
+                            <Marker
+                                coordinate={ this.state.region }
+                            />
+                        )
+                        : null
+                    }
+                </MapView>
                 <GlamButtonContainer>
                     <Button
                         onPress={ this._handlePress }
