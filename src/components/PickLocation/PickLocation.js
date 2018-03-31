@@ -29,12 +29,23 @@ class PickLocation extends PureComponent {
     _handlePress = () => {
         console.log('press locate me')
     }
+    _handleMapPress = ({ nativeEvent: { coordinate } }) => {
+        this.setState(prevState => ({
+            region: {
+                ...prevState.region,
+                latitude  : coordinate.latitude,
+                longitude : coordinate.longitude
+            }
+        }))
+    }
     render () {
         return (
             <Fragment>
                 <MapView
                     initialRegion={ this.state.region }
+                    onPress={ this._handleMapPress }
                     provider={ MapView.PROVIDER_GOOGLE }
+                    region={ this.state.region }
                     style={ styles.map }
                 />
                 <GlamButtonContainer>
