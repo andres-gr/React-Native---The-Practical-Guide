@@ -27,8 +27,11 @@ class PickLocation extends PureComponent {
         },
         marker: false
     }
+    setMapRef = el => {
+        this.map = el
+    }
     _handlePress = () => {
-        console.log('press locate me')
+        console.dir(this.map)
     }
     _handleMapPress = ({ nativeEvent: { coordinate } }) => {
         this.setState(prevState => ({
@@ -38,7 +41,9 @@ class PickLocation extends PureComponent {
                 longitude : coordinate.longitude
             },
             marker: true
-        }))
+        }), () => {
+            this.map.animateToRegion(this.state.region)
+        })
     }
     render () {
         return (
@@ -47,7 +52,7 @@ class PickLocation extends PureComponent {
                     initialRegion={ this.state.region }
                     onPress={ this._handleMapPress }
                     provider={ MapView.PROVIDER_GOOGLE }
-                    region={ this.state.region }
+                    ref={ this.setMapRef }
                     style={ styles.map }
                 >
                     { this.state.marker
