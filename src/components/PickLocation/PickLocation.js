@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import { Button, View, Dimensions } from 'react-native'
 import MapView, { Marker } from 'react-native-maps'
 import EStyleSheet from 'react-native-extended-stylesheet'
@@ -17,7 +17,9 @@ const GlamButtonContainer = glamFactory(View, 'GlamButtonContainer', {
 })
 
 class PickLocation extends PureComponent {
-    static propTypes = {}
+    static propTypes = {
+        setLocation: PropTypes.func.isRequired
+    }
     state = {
         region: {
             latitude       : 25.6117328,
@@ -57,6 +59,10 @@ class PickLocation extends PureComponent {
             marker: true
         }), () => {
             this.map.animateToRegion(this.state.region)
+            this.props.setLocation({
+                latitude  : coordinate.latitude,
+                longitude : coordinate.longitude
+            })
         })
     }
     render () {

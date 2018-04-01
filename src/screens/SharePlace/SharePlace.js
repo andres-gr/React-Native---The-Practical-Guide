@@ -10,6 +10,7 @@ import PlaceInput from '../../components/PlaceInput/PlaceInput'
 import PickImage from '../../components/PickImage/PickImage'
 import PickLocation from '../../components/PickLocation/PickLocation'
 import placesSchema from '../../utils/validation/places'
+import locationSchema from '../../utils/validation/location'
 
 const GlamScrollContainer = glamFactory(View, 'GlamScrollContainer', {
     alignItems  : 'center',
@@ -32,17 +33,48 @@ class SharePlaceScreen extends PureComponent {
     }
     state = {
         placeName : '',
-        isValid   : false
+        location  : null,
+        isValid   : {
+            place    : false,
+            location : false
+        }
     }
     _handleChangeText = async placeName => {
         const isValid = await placesSchema.isValid({ name: placeName })
-        this.setState({ isValid, placeName })
+        this.setState(prevState => ({
+            isValid: {
+                ...prevState.isValid,
+                place: isValid
+            },
+            placeName
+        }))
     }
     _handlePlaceAdded = async () => {
-        if (this.state.isValid) {
-            await this.props.addPlace(this.state.placeName)
-            this.setState({ isValid: false, placeName: '' })
+        if (this.state.isValid.place && this.state.isValid.location) {
+            await this.props.addPlace({
+                placeName : this.state.placeName,
+                latitude  : this.state.location.latitude,
+                longitude : this.state.location.longitude
+            })
+            this.setState({
+                isValid: {
+                    place    : false,
+                    location : false
+                },
+                placeName : '',
+                location  : null
+            })
         }
+    }
+    _handleLocationPick = async location => {
+        const isValid = await locationSchema.isValid(location)
+        this.setState(prevState => ({
+            isValid: {
+                ...prevState.isValid,
+                location: isValid
+            },
+            location
+        }))
     }
     render () {
         return (
@@ -52,14 +84,16 @@ class SharePlaceScreen extends PureComponent {
                         <HeadingText>Share a place with us!</HeadingText>
                     </MainText>
                     <PickImage />
-                    <PickLocation />
+                    <PickLocation
+                        setLocation={ this._handleLocationPick }
+                    />
                     <PlaceInput
                         onChangeText={ this._handleChangeText }
                         value={ this.state.placeName }
                     />
                     <GlamButtonContainer>
                         <Button
-                            disabled={ !this.state.isValid }
+                            disabled={ !this.state.isValid.place || !this.state.isValid.location }
                             onPress={ this._handlePlaceAdded }
                             title="Share the place"
                         />

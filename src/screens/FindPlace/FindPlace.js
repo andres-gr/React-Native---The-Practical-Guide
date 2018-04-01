@@ -87,6 +87,7 @@ class FindPlaceScreen extends PureComponent {
         opacity: this.state.listAnimated
     }
     render () {
+        console.dir(this.props.places)
         return (
             <GlamFindPlaceContainer
                 loaded={ this.state.loaded }
