@@ -1,6 +1,7 @@
 package com.tutorialapp;
 
 import com.facebook.react.ReactPackage;
+import com.imagepicker.ImagePickerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnativenavigation.NavigationApplication;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
@@ -20,7 +21,8 @@ public class MainApplication extends NavigationApplication {
         return Arrays.<ReactPackage>asList(
                 new VectorIconsPackage(),
                 new SplashScreenReactPackage(),
-                new MapsPackage()
+                new MapsPackage(),
+                new ImagePickerPackage()
         );
     }
 

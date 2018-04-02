@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationUsageDescription</key>
-	<string>Share location?</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -43,8 +41,18 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>${PRODUCT_NAME} would like to access your camera</string>
+	<key>NSLocationUsageDescription</key>
+	<string>${PRODUCT_NAME} would like to access your location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>${PRODUCT_NAME} would like to access your location</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>${PRODUCT_NAME} would like to use your microphone</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>${PRODUCT_NAME} would like to save photos to your gallery</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>${PRODUCT_NAME} would like to use your photo gallery</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>MaterialCommunityIcons.ttf</string>
