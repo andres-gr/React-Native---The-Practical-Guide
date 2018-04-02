@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Dimensions, Image, Platform, Text, TouchableOpacity, View } from 'react-native'
+import MapView, { Marker } from 'react-native-maps'
+import EStyleSheet from 'react-native-extended-stylesheet'
 import Icon from 'react-native-vector-icons/Ionicons'
 import glamFactory from '../../utils/styles/glamFactory'
 import deletePlace from '../../decorators/deletePlace'
@@ -8,25 +10,21 @@ import deletePlace from '../../decorators/deletePlace'
 const trashIcon = Platform.OS === 'android' ? 'md-trash' : 'ios-trash'
 
 const GlamDetailContainer = glamFactory(View, 'GlamDetailContainer', {
-    margin: 22
+    flex             : 1,
+    marginHorizontal : 20,
+    marginTop        : 8
 }, ({ viewMode }) => ({
     flexDirection: viewMode === 'landscape' ? 'row' : 'column'
 }))
 
 const GlamDetailImage = glamFactory(Image, 'GlamDetailImage', {
-    height : 200,
+    height : '100%',
     width  : '100%'
-}, ({ viewMode }) => ({
-    height : viewMode === 'landscape' ? 150 : 200,
-    width  : viewMode === 'landscape' ? '50%' : '100%'
-}))
+})
 
 const GlamTitleBtnContainer = glamFactory(View, 'GlamTitleBtnContainer', {
-    width: '100%'
-}, ({ viewMode }) => ({
-    justifyContent : viewMode === 'landscape' ? 'center' : 'flex-start',
-    width          : viewMode === 'landscape' ? '50%' : '100%'
-}))
+    flex: 1
+})
 
 const GlamDetailText = glamFactory(Text, 'GlamDetailText', {
     fontSize   : 28,
@@ -36,6 +34,18 @@ const GlamDetailText = glamFactory(Text, 'GlamDetailText', {
 
 const GlamDeleteBtn = glamFactory(View, 'GlamDeleteBtn', {
     alignItems: 'center'
+})
+
+const styles = EStyleSheet.create({
+    subContainer: {
+        flex: 2
+    },
+    map: {
+        ...EStyleSheet.absoluteFillObject
+    },
+    wrapper: {
+        flex: 1
+    }
 })
 
 @deletePlace
@@ -75,23 +85,52 @@ class PlaceDetail extends PureComponent {
         const {
             selectedPlace
         } = this.props
+        if (!selectedPlace) {
+            return null
+        }
         return (
             <GlamDetailContainer
                 viewMode={ this.state.viewMode }
             >
-                { selectedPlace &&
-                    <GlamDetailImage
-                        resizeMode="contain"
-                        source={ selectedPlace.image }
-                        viewMode={ this.state.viewMode }
-                    />
-                }
-                <GlamTitleBtnContainer
-                    viewMode={ this.state.viewMode }
+                <View
+                    style={ styles.subContainer }
                 >
-                    { selectedPlace &&
-                        <GlamDetailText>{ selectedPlace.name }</GlamDetailText>
-                    }
+                    <View
+                        style={ styles.wrapper }
+                    >
+                        <GlamDetailImage
+                            resizeMode="contain"
+                            source={ selectedPlace.image }
+                            viewMode={ this.state.viewMode }
+                        />
+                    </View>
+                    <View
+                        style={ styles.wrapper }
+                    >
+                        <MapView
+                            initialRegion={{
+                                latitude       : selectedPlace.location.latitude,
+                                longitude      : selectedPlace.location.longitude,
+                                latitudeDelta  : 0.0122,
+                                longitudeDelta : (Dimensions.get('window').width / Dimensions.get('window').height) * 0.0122
+                            }}
+                            pitchEnabled={ false }
+                            rotateEnabled={ false }
+                            scrollEnabled={ false }
+                            style={ styles.map }
+                            zoomEnabled={ false }
+                        >
+                            <Marker
+                                coordinate={{
+                                    latitude  : selectedPlace.location.latitude,
+                                    longitude : selectedPlace.location.longitude
+                                }}
+                            />
+                        </MapView>
+                    </View>
+                </View>
+                <GlamTitleBtnContainer>
+                    <GlamDetailText>{ selectedPlace.name }</GlamDetailText>
                     <TouchableOpacity
                         onPress={ this._handleDeletePress }
                     >
