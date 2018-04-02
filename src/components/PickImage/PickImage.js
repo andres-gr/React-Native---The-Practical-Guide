@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react'
 // import PropTypes from 'prop-types'
 import { Button, Image, View } from 'react-native'
 import glamFactory from '../../utils/styles/glamFactory'
-import image0 from '../../assets/images/image0.jpg'
+import ImagePicker from '../../utils/helpers/ImagePicker'
 
 const GlamPlaceholder = glamFactory(View, 'GlamPlaceholder', {
     backgroundColor : '#EEE',
@@ -23,14 +23,29 @@ const GlamButtonContainer = glamFactory(View, 'GlamButtonContainer', {
 
 class PickImage extends PureComponent {
     static propTypes = {}
+    state = {
+        image: null
+    }
     _handlePress = () => {
-        console.log('press pick image')
+        ImagePicker.showImagePicker({ title: 'Pick an image' }, result => {
+            if (result.didCancel) {
+                console.dir('Canceled pick image')
+            } else if (result.error) {
+                console.log('Error, ', result.error)
+            } else {
+                this.setState({
+                    image: {
+                        uri: result.uri
+                    }
+                })
+            }
+        })
     }
     render () {
         return (
             <Fragment>
                 <GlamPlaceholder>
-                    <GlamImagePlacholder source={ image0 } />
+                    <GlamImagePlacholder source={ this.state.image } />
                 </GlamPlaceholder>
                 <GlamButtonContainer>
                     <Button
