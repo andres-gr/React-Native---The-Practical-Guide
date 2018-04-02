@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import { Button, Image, View } from 'react-native'
 import glamFactory from '../../utils/styles/glamFactory'
 import ImagePicker from '../../utils/helpers/ImagePicker'
@@ -22,14 +22,16 @@ const GlamButtonContainer = glamFactory(View, 'GlamButtonContainer', {
 })
 
 class PickImage extends PureComponent {
-    static propTypes = {}
+    static propTypes = {
+        setImage: PropTypes.func.isRequired
+    }
     state = {
         image: null
     }
     _handlePress = () => {
         ImagePicker.showImagePicker({ title: 'Pick an image' }, result => {
             if (result.didCancel) {
-                console.dir('Canceled pick image')
+                console.log('Canceled pick image')
             } else if (result.error) {
                 console.log('Error, ', result.error)
             } else {
@@ -37,6 +39,8 @@ class PickImage extends PureComponent {
                     image: {
                         uri: result.uri
                     }
+                }, () => {
+                    this.props.setImage(result.uri)
                 })
             }
         })

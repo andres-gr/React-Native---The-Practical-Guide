@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Button, ScrollView, View } from 'react-native'
+import _ from 'lodash'
 import addPlace from '../../decorators/addPlace'
 import sideDrawerToggle from '../../utils/helpers/sideDrawerToggle'
 import glamFactory from '../../utils/styles/glamFactory'
@@ -11,6 +12,7 @@ import PickImage from '../../components/PickImage/PickImage'
 import PickLocation from '../../components/PickLocation/PickLocation'
 import placesSchema from '../../utils/validation/places'
 import locationSchema from '../../utils/validation/location'
+import imageSchema from '../../utils/validation/image'
 
 const GlamScrollContainer = glamFactory(View, 'GlamScrollContainer', {
     alignItems  : 'center',
@@ -34,9 +36,11 @@ class SharePlaceScreen extends PureComponent {
     state = {
         placeName : '',
         location  : null,
+        image     : '',
         isValid   : {
             place    : false,
-            location : false
+            location : false,
+            image    : false
         }
     }
     _handleChangeText = async placeName => {
@@ -50,19 +54,22 @@ class SharePlaceScreen extends PureComponent {
         }))
     }
     _handlePlaceAdded = async () => {
-        if (this.state.isValid.place && this.state.isValid.location) {
+        if (this.checkValidity()) {
             await this.props.addPlace({
                 placeName : this.state.placeName,
                 latitude  : this.state.location.latitude,
-                longitude : this.state.location.longitude
+                longitude : this.state.location.longitude,
+                uri       : this.state.image
             })
             this.setState({
                 isValid: {
                     place    : false,
-                    location : false
+                    location : false,
+                    image    : false
                 },
                 placeName : '',
-                location  : null
+                location  : null,
+                image     : ''
             })
         }
     }
@@ -76,6 +83,17 @@ class SharePlaceScreen extends PureComponent {
             location
         }))
     }
+    _handleImagePicked = async uri => {
+        const isValid = await imageSchema.isValid(uri)
+        this.setState(prevState => ({
+            isValid: {
+                ...prevState.isValid,
+                image: isValid
+            },
+            image: uri
+        }))
+    }
+    checkValidity = () => _.every(this.state.isValid, i => i === true)
     render () {
         return (
             <ScrollView>
@@ -83,7 +101,9 @@ class SharePlaceScreen extends PureComponent {
                     <MainText>
                         <HeadingText>Share a place with us!</HeadingText>
                     </MainText>
-                    <PickImage />
+                    <PickImage
+                        setImage={ this._handleImagePicked }
+                    />
                     <PickLocation
                         setLocation={ this._handleLocationPick }
                     />
@@ -93,7 +113,7 @@ class SharePlaceScreen extends PureComponent {
                     />
                     <GlamButtonContainer>
                         <Button
-                            disabled={ !this.state.isValid.place || !this.state.isValid.location }
+                            disabled={ !this.checkValidity() }
                             onPress={ this._handlePlaceAdded }
                             title="Share the place"
                         />

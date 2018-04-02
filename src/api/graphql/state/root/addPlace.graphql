@@ -1,5 +1,5 @@
-mutation AddPlace($placeName: String!, $latitude: Float!, $longitude: Float!) {
-    addPlace(placeName: $placeName, latitude: $latitude, longitude: $longitude) @client {
+mutation AddPlace($placeName: String!, $latitude: Float!, $longitude: Float!, $uri: String!) {
+    addPlace(placeName: $placeName, latitude: $latitude, longitude: $longitude, uri: $uri) @client {
         places
     }
 }

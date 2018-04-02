@@ -3,7 +3,7 @@ import ADD_PLACE from '../api/graphql/state/root/addPlace.graphql'
 
 const addPlace = graphql(ADD_PLACE, {
     props: ({ mutate }) => ({
-        addPlace: ({ placeName, latitude, longitude }) => mutate({ variables: { placeName, latitude, longitude } })
+        addPlace: ({ placeName, latitude, longitude, uri }) => mutate({ variables: { placeName, latitude, longitude, uri } })
     })
 })
 

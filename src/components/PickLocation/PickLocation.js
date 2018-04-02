@@ -45,7 +45,7 @@ class PickLocation extends PureComponent {
                 })
             },
             err => {
-                console.dir(err)
+                console.log(err)
             }
         )
     }

@@ -14,7 +14,7 @@ const rootState = {
             places : () => []
         },
         Mutation: {
-            addPlace: (_root, { placeName, latitude, longitude }, { cache }) => {
+            addPlace: (_root, { placeName, latitude, longitude, uri }, { cache }) => {
                 idPlace += 1
                 const prevCache = cache.readQuery({ query: GET_CURRENT_PLACES }),
                     _id = String(idPlace),
@@ -28,8 +28,8 @@ const rootState = {
                             longitude
                         },
                         image: {
-                            __typename : 'ImageState',
-                            uri        : 'http://lorempixel.com/output/abstract-q-c-640-480-2.jpg'
+                            __typename: 'ImageState',
+                            uri
                         }
                     },
                     data = {
