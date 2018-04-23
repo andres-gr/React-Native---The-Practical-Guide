@@ -5,7 +5,7 @@ const UUID = require('uuid-v4');
 const gcconfig = {
     projectId: 'tutorialapp-1522128831135',
     keyFilename: 'tutorialapp.json'
-}
+};
 const gcs = require('@google-cloud/storage')(gcconfig);
 
 // // Create and Deploy Your First Cloud Functions
@@ -25,9 +25,20 @@ exports.storeImage = functions.https.onRequest((request, response) => {
             uploadType: 'media',
             destination: '/places/' + uuid + 'jpg',
             metadata: {
-                contentType: 'image/jpeg',
-                firebaseStorageDownloadTokens: uuid
+                metadata: {
+                    contentType: 'image/jpeg',
+                    firebaseStorageDownloadTokens: uuid
+                }
             }
-        })
+        }, (err, file) => {
+            if (!err) {
+                response.status(201).json({
+                    imageUrl: 'https://firebasestorage.googleapis.com/v0/b/' + bucket.name + '/o/' + encodeURIComponent(file.name) + '?alt=media&token=' + uuid
+                });
+            } else {
+                console.log(err);
+                response.status(500).json({ error: err });
+            }
+        });
     });
 });

@@ -40,7 +40,7 @@ class PickImage extends PureComponent {
                         uri: result.uri
                     }
                 }, () => {
-                    this.props.setImage(result.uri)
+                    this.props.setImage(result.uri, result.data)
                 })
             }
         })

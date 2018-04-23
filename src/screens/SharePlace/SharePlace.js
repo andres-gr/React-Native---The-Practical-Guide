@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Button, ScrollView, View } from 'react-native'
 import _ from 'lodash'
-import { FIREBASE_URI } from '../../utils/constants'
+import { FIREBASE_STOREIMAGE } from '../../utils/constants'
 import addPlace from '../../decorators/addPlace'
 import sideDrawerToggle from '../../utils/helpers/sideDrawerToggle'
 import glamFactory from '../../utils/styles/glamFactory'
@@ -36,7 +36,7 @@ class SharePlaceScreen extends PureComponent {
     }
     state = {
         checking  : false,
-        image     : '',
+        image     : null,
         location  : null,
         placeName : '',
         isValid   : {
@@ -59,20 +59,47 @@ class SharePlaceScreen extends PureComponent {
         this.setState({ checking: true })
         if (this.checkValidity()) {
             try {
-                const response = await fetch(FIREBASE_URI, {
+                const response = await fetch(FIREBASE_STOREIMAGE, {
                     method : 'POST',
                     body   : JSON.stringify({
-                        name     : this.state.placeName,
-                        location : this.state.location
+                        image: this.state.image.base64
                     })
                 })
                 const jsonRes = await response.json()
                 console.log(jsonRes)
+                // const response = await fetch(FIREBASE_URI, {
+                //     method : 'POST',
+                //     body   : JSON.stringify({
+                //         name     : this.state.placeName,
+                //         location : this.state.location
+                //     })
+                // })
+                // const jsonRes = await response.json()
+                // console.log(jsonRes)
                 this.setState({ checking: false })
             } catch (e) {
                 console.log(e)
                 this.setState({ checking: false })
             }
+            // await this.props.addPlace({
+            //     placeName : this.state.placeName,
+            //     latitude  : this.state.location.latitude,
+            //     longitude : this.state.location.longitude,
+            //     image       : {
+            //         uri    : this.state.image.uri,
+            //         base64 : this.state.image.base64
+            //     }
+            // })
+            // this.setState({
+            //     isValid: {
+            //         place    : false,
+            //         location : false,
+            //         image    : false
+            //     },
+            //     placeName : '',
+            //     location  : null,
+            //     image     : null
+            // })
         }
     }
     _handleLocationPick = async location => {
@@ -85,14 +112,14 @@ class SharePlaceScreen extends PureComponent {
             location
         }))
     }
-    _handleImagePicked = async uri => {
-        const isValid = await imageSchema.isValid(uri)
+    _handleImagePicked = async (uri, base64) => {
+        const isValid = await imageSchema.isValid(uri) && await imageSchema.isValid(base64)
         this.setState(prevState => ({
             isValid: {
                 ...prevState.isValid,
                 image: isValid
             },
-            image: uri
+            image: { uri, base64 }
         }))
     }
     checkValidity = () => _.every(this.state.isValid, i => i === true)
