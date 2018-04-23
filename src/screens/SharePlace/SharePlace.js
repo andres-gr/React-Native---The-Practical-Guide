@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Button, ScrollView, View } from 'react-native'
 import _ from 'lodash'
+import { FIREBASE_URI } from '../../utils/constants'
 import addPlace from '../../decorators/addPlace'
 import sideDrawerToggle from '../../utils/helpers/sideDrawerToggle'
 import glamFactory from '../../utils/styles/glamFactory'
@@ -34,9 +35,10 @@ class SharePlaceScreen extends PureComponent {
         props.navigator.addOnNavigatorEvent(sideDrawerToggle.bind(this, { side: 'left' }))
     }
     state = {
-        placeName : '',
-        location  : null,
+        checking  : false,
         image     : '',
+        location  : null,
+        placeName : '',
         isValid   : {
             place    : false,
             location : false,
@@ -54,23 +56,23 @@ class SharePlaceScreen extends PureComponent {
         }))
     }
     _handlePlaceAdded = async () => {
+        this.setState({ checking: true })
         if (this.checkValidity()) {
-            await this.props.addPlace({
-                placeName : this.state.placeName,
-                latitude  : this.state.location.latitude,
-                longitude : this.state.location.longitude,
-                uri       : this.state.image
-            })
-            this.setState({
-                isValid: {
-                    place    : false,
-                    location : false,
-                    image    : false
-                },
-                placeName : '',
-                location  : null,
-                image     : ''
-            })
+            try {
+                const response = await fetch(FIREBASE_URI, {
+                    method : 'POST',
+                    body   : JSON.stringify({
+                        name     : this.state.placeName,
+                        location : this.state.location
+                    })
+                })
+                const jsonRes = await response.json()
+                console.log(jsonRes)
+                this.setState({ checking: false })
+            } catch (e) {
+                console.log(e)
+                this.setState({ checking: false })
+            }
         }
     }
     _handleLocationPick = async location => {
@@ -113,7 +115,7 @@ class SharePlaceScreen extends PureComponent {
                     />
                     <GlamButtonContainer>
                         <Button
-                            disabled={ !this.checkValidity() }
+                            disabled={ this.state.checking || !this.checkValidity() }
                             onPress={ this._handlePlaceAdded }
                             title="Share the place"
                         />
