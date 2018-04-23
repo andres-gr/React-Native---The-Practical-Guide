@@ -1,6 +1,6 @@
 import GET_CURRENT_PLACES from './places.graphql'
 import { LOGIN } from './auth.graphql'
-import { FIREBASE_URI } from '../../../../utils/constants'
+import { FIREBASE_URI, FIREBASE_DELETE_URI } from '../../../../utils/constants'
 
 let idPlace = 0
 
@@ -72,15 +72,21 @@ const rootState = {
                     __typename: 'PlacesState'
                 }
             },
-            deletePlace: (_root, { key }, { cache }) => {
-                const prevCache = cache.readQuery({ query: GET_CURRENT_PLACES }),
-                    data = {
-                        places: prevCache.places.filter(place => place.key !== key)
+            deletePlace: async (_root, { key }, { cache }) => {
+                try {
+                    await fetch(FIREBASE_DELETE_URI(key), { method: 'DELETE' })
+                    const prevCache = cache.readQuery({ query: GET_CURRENT_PLACES }),
+                        data = {
+                            places: prevCache.places.filter(place => place.key !== key)
+                        }
+                    cache.writeQuery({ data, query: GET_CURRENT_PLACES })
+                    return {
+                        ...data,
+                        __typename: 'PlacesState'
                     }
-                cache.writeQuery({ data, query: GET_CURRENT_PLACES })
-                return {
-                    ...data,
-                    __typename: 'PlacesState'
+                } catch (e) {
+                    console.log(e)
+                    return null
                 }
             },
             login: (parent, { email, password }, { cache }) => {
