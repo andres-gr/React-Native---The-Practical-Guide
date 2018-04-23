@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { Button, ScrollView, View } from 'react-native'
+import { Button, ScrollView, View, ActivityIndicator } from 'react-native'
 import _ from 'lodash'
 import { FIREBASE_STOREIMAGE, FIREBASE_URI } from '../../utils/constants'
 import addPlace from '../../decorators/addPlace'
@@ -74,8 +74,7 @@ class SharePlaceScreen extends PureComponent {
                         image    : imageJson.imageUrl
                     })
                 })
-                const jsonRes = await response.json()
-                console.log(jsonRes)
+                await response.json()
                 await this.props.addPlace({
                     placeName : this.state.placeName,
                     latitude  : this.state.location.latitude,
@@ -138,11 +137,16 @@ class SharePlaceScreen extends PureComponent {
                         value={ this.state.placeName }
                     />
                     <GlamButtonContainer>
-                        <Button
-                            disabled={ this.state.checking || !this.checkValidity() }
-                            onPress={ this._handlePlaceAdded }
-                            title="Share the place"
-                        />
+                        { !this.state.checking
+                            ? (
+                                <Button
+                                    disabled={ !this.checkValidity() }
+                                    onPress={ this._handlePlaceAdded }
+                                    title="Share the place"
+                                />
+                            )
+                            : <ActivityIndicator size={ 32 } />
+                        }
                     </GlamButtonContainer>
                 </GlamScrollContainer>
             </ScrollView>
