@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Button, ScrollView, View } from 'react-native'
 import _ from 'lodash'
-import { FIREBASE_STOREIMAGE } from '../../utils/constants'
+import { FIREBASE_STOREIMAGE, FIREBASE_URI } from '../../utils/constants'
 import addPlace from '../../decorators/addPlace'
 import sideDrawerToggle from '../../utils/helpers/sideDrawerToggle'
 import glamFactory from '../../utils/styles/glamFactory'
@@ -59,47 +59,44 @@ class SharePlaceScreen extends PureComponent {
         this.setState({ checking: true })
         if (this.checkValidity()) {
             try {
-                const response = await fetch(FIREBASE_STOREIMAGE, {
+                const imageResponse = await fetch(FIREBASE_STOREIMAGE, {
                     method : 'POST',
                     body   : JSON.stringify({
                         image: this.state.image.base64
                     })
                 })
+                const imageJson = await imageResponse.json()
+                const response = await fetch(FIREBASE_URI, {
+                    method : 'POST',
+                    body   : JSON.stringify({
+                        name     : this.state.placeName,
+                        location : this.state.location,
+                        image    : imageJson.imageUrl
+                    })
+                })
                 const jsonRes = await response.json()
                 console.log(jsonRes)
-                // const response = await fetch(FIREBASE_URI, {
-                //     method : 'POST',
-                //     body   : JSON.stringify({
-                //         name     : this.state.placeName,
-                //         location : this.state.location
-                //     })
-                // })
-                // const jsonRes = await response.json()
-                // console.log(jsonRes)
-                this.setState({ checking: false })
+                await this.props.addPlace({
+                    placeName : this.state.placeName,
+                    latitude  : this.state.location.latitude,
+                    longitude : this.state.location.longitude,
+                    uri       : imageJson.imageUrl
+                })
+                this.setState({
+                    isValid: {
+                        place    : false,
+                        location : false,
+                        image    : false
+                    },
+                    checking  : false,
+                    image     : null,
+                    location  : null,
+                    placeName : ''
+                })
             } catch (e) {
                 console.log(e)
                 this.setState({ checking: false })
             }
-            // await this.props.addPlace({
-            //     placeName : this.state.placeName,
-            //     latitude  : this.state.location.latitude,
-            //     longitude : this.state.location.longitude,
-            //     image       : {
-            //         uri    : this.state.image.uri,
-            //         base64 : this.state.image.base64
-            //     }
-            // })
-            // this.setState({
-            //     isValid: {
-            //         place    : false,
-            //         location : false,
-            //         image    : false
-            //     },
-            //     placeName : '',
-            //     location  : null,
-            //     image     : null
-            // })
         }
     }
     _handleLocationPick = async location => {

@@ -14,7 +14,7 @@ const rootState = {
             places : () => []
         },
         Mutation: {
-            addPlace: (_root, { placeName, latitude, longitude, image: { uri, base64 } }, { cache }) => {
+            addPlace: (_root, { placeName, latitude, longitude, uri }, { cache }) => {
                 idPlace += 1
                 const prevCache = cache.readQuery({ query: GET_CURRENT_PLACES }),
                     _id = String(idPlace),

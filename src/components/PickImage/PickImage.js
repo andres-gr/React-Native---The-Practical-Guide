@@ -37,7 +37,8 @@ class PickImage extends PureComponent {
             } else {
                 this.setState({
                     image: {
-                        uri: result.uri
+                        uri    : result.uri,
+                        base64 : result.data
                     }
                 }, () => {
                     this.props.setImage(result.uri, result.data)
