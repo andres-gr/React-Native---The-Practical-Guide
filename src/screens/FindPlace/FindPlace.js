@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import { Animated, Text, TouchableWithoutFeedback, View } from 'react-native'
 import glamFactory from '../../utils/styles/glamFactory'
 import List from '../../components/List/List'
-import withCurrentPlaces from '../../decorators/withCurrentPlaces'
 import sideDrawerToggle from '../../utils/helpers/sideDrawerToggle'
 import GlamAnimated from '../../components/Animated/Animated'
+import withPlaces from '../../decorators/getCurrentPlaces'
 
 const GlamFindPlaceContainer = glamFactory(View, 'GlamFindPlaceContainer', {}, ({ loaded }) => ({
     alignItems     : loaded ? 'flex-start' : 'center',
@@ -26,11 +26,11 @@ const GlamSearchText = glamFactory(Text, 'GlamSearchText', {
     fontWeight : 'bold'
 })
 
-@withCurrentPlaces
+@withPlaces
 class FindPlaceScreen extends PureComponent {
     static propTypes = {
-        navigator   : PropTypes.object.isRequired,
-        places      : PropTypes.arrayOf(PropTypes.object).isRequired
+        navigator : PropTypes.object.isRequired,
+        getPlaces : PropTypes.func.isRequired
     }
     constructor (props) {
         super(props)
@@ -39,10 +39,20 @@ class FindPlaceScreen extends PureComponent {
     state = {
         loaded         : false,
         removeAnimated : new Animated.Value(1),
-        listAnimated   : new Animated.Value(0)
+        listAnimated   : new Animated.Value(0),
+        places         : []
+    }
+    async componentDidMount () {
+        const { data: { getPlaces: { places } } } = await this.props.getPlaces()
+        if (places.length) {
+            this.setPlaces(places)
+        }
+    }
+    setPlaces = places => {
+        this.setState({ places })
     }
     _handleItemPress = key => {
-        const selectedPlace = this.props.places.find(place => place.key === key)
+        const selectedPlace = this.state.places.find(place => place.key === key)
         this.props.navigator.push({
             backButtonTitle : 'Back',
             passProps       : {
@@ -99,7 +109,7 @@ class FindPlaceScreen extends PureComponent {
                         >
                             <List
                                 pressEvent={ this._handleItemPress }
-                                places={ this.props.places }
+                                places={ this.state.places }
                             />
                         </GlamAnimated>
                     )

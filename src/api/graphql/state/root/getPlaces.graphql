@@ -1,0 +1,5 @@
+mutation GET_CURRENT_PLACES {
+    getPlaces @client {
+        places
+    }
+}

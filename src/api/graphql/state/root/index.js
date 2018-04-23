@@ -1,5 +1,6 @@
 import GET_CURRENT_PLACES from './places.graphql'
 import { LOGIN } from './auth.graphql'
+import { FIREBASE_URI } from '../../../../utils/constants'
 
 let idPlace = 0
 
@@ -14,6 +15,36 @@ const rootState = {
             places : () => []
         },
         Mutation: {
+            getPlaces: async (_root, args, { cache }) => {
+                const response = await fetch(FIREBASE_URI),
+                    jsonRes = await response.json(),
+                    data = await jsonRes,
+                    prevCache = cache.readQuery({ query: GET_CURRENT_PLACES }),
+                    places = []
+                Object.entries(data).forEach(([_id, val]) => {
+                    places.push({
+                        _id,
+                        key      : _id,
+                        name     : val.name,
+                        location : {
+                            __typename: 'LocationState',
+                            ...val.location
+                        },
+                        image: {
+                            __typename : 'ImageState',
+                            uri        : val.image
+                        }
+                    })
+                })
+                const newData = {
+                    places: [...prevCache, ...places]
+                }
+                cache.writeQuery({ query: GET_CURRENT_PLACES, data: newData })
+                return {
+                    ...newData,
+                    __typename: 'PlacesState'
+                }
+            },
             addPlace: (_root, { placeName, latitude, longitude, uri }, { cache }) => {
                 idPlace += 1
                 const prevCache = cache.readQuery({ query: GET_CURRENT_PLACES }),
