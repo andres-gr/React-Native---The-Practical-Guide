@@ -94,6 +94,7 @@ class SharePlaceScreen extends PureComponent {
                 })
             } catch (e) {
                 console.log(e)
+                alert('Something failed, try again')
                 this.setState({ checking: false })
             }
         }
