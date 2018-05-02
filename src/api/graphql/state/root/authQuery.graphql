@@ -1,0 +1,3 @@
+query TOKEN {
+    authToken @client
+}

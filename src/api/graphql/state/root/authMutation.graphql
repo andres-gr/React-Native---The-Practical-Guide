@@ -1,0 +1,6 @@
+mutation LOGIN($email: String!, $password: String!, $isLogin: Boolean!) {
+    login(email: $email, password: $password, isLogin: $isLogin) @client {
+        authError
+        authToken
+    }
+}

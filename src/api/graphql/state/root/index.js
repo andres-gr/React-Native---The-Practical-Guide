@@ -1,27 +1,27 @@
+import { AsyncStorage } from 'react-native'
 import GET_CURRENT_PLACES from './places.graphql'
-import { LOGIN } from './auth.graphql'
-import { FIREBASE_URI, FIREBASE_DELETE_URI } from '../../../../utils/constants'
+import TOKEN from './authQuery.graphql'
+import { FIREBASE_URI, FIREBASE_DELETE_URI, FIREBASE_SIGNUP, FIREBASE_LOGIN, TOKEN_KEY } from '../../../../utils/constants'
 
 let idPlace = 0
 
 const rootState = {
     defaults: {
-        auth   : null,
-        places : []
+        authError : null,
+        authToken : null,
+        places    : []
     },
     resolvers: {
-        Query: {
-            auth   : () => null,
-            places : () => []
-        },
         Mutation: {
             getPlaces: async (_root, args, { cache }) => {
-                const response = await fetch(FIREBASE_URI),
-                    jsonRes = await response.json(),
-                    data = await jsonRes,
-                    prevCache = cache.readQuery({ query: GET_CURRENT_PLACES }),
+                const request = await fetch(`${FIREBASE_URI}?auth=${await AsyncStorage.getItem(TOKEN_KEY)}`),
+                    response = await request.json()
+                if (response.error) {
+                    return null
+                }
+                const prevCache = cache.readQuery({ query: GET_CURRENT_PLACES }),
                     places = []
-                Object.entries(data).forEach(([_id, val]) => {
+                Object.entries(response).forEach(([_id, val]) => {
                     places.push({
                         _id,
                         key      : _id,
@@ -74,7 +74,7 @@ const rootState = {
             },
             deletePlace: async (_root, { key }, { cache }) => {
                 try {
-                    await fetch(FIREBASE_DELETE_URI(key), { method: 'DELETE' })
+                    await fetch(FIREBASE_DELETE_URI(key, await AsyncStorage.getItem(TOKEN_KEY)), { method: 'DELETE' })
                     const prevCache = cache.readQuery({ query: GET_CURRENT_PLACES }),
                         data = {
                             places: prevCache.places.filter(place => place.key !== key)
@@ -89,22 +89,33 @@ const rootState = {
                     return null
                 }
             },
-            login: (parent, { email, password }, { cache }) => {
-                const data = {
-                    login: {
-                        __typename : 'LoginState',
-                        auth       : {
-                            __typename: 'AuthState',
-                            email,
-                            password
-                        }
+            login: async (parent, { email, password, isLogin }, { cache }) => {
+                const payload = {
+                    method : 'POST',
+                    body   : JSON.stringify({
+                        email,
+                        password,
+                        returnSecureToken: true
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
                 }
-                cache.writeQuery({ data, query: LOGIN })
-                return {
-                    ...data,
-                    __typename: 'LoginState'
+                const request = await fetch(isLogin ? FIREBASE_LOGIN : FIREBASE_SIGNUP, payload),
+                    response = await request.json()
+                if (response.error) {
+                    return {
+                        __typename : 'Auth',
+                        authError  : response.error.message
+                    }
                 }
+                await AsyncStorage.setItem(TOKEN_KEY, response.idToken)
+                const data = {
+                    __typename : 'Auth',
+                    authToken  : response.idToken
+                }
+                cache.writeQuery({ data, query: TOKEN })
+                return data
             }
         }
     }

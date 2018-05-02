@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { Button, ScrollView, View, ActivityIndicator } from 'react-native'
+import { Button, ScrollView, View, ActivityIndicator, AsyncStorage } from 'react-native'
 import _ from 'lodash'
-import { FIREBASE_STOREIMAGE, FIREBASE_URI } from '../../utils/constants'
+import { FIREBASE_STOREIMAGE, FIREBASE_URI, TOKEN_KEY } from '../../utils/constants'
 import addPlace from '../../decorators/addPlace'
 import sideDrawerToggle from '../../utils/helpers/sideDrawerToggle'
 import glamFactory from '../../utils/styles/glamFactory'
@@ -59,14 +59,18 @@ class SharePlaceScreen extends PureComponent {
         this.setState({ checking: true })
         if (this.checkValidity()) {
             try {
-                const imageResponse = await fetch(FIREBASE_STOREIMAGE, {
-                    method : 'POST',
-                    body   : JSON.stringify({
-                        image: this.state.image.base64
+                const token = await AsyncStorage.getItem(TOKEN_KEY),
+                    imageResponse = await fetch(FIREBASE_STOREIMAGE, {
+                        method : 'POST',
+                        body   : JSON.stringify({
+                            image: this.state.image.base64
+                        }),
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
                     })
-                })
                 const imageJson = await imageResponse.json()
-                const response = await fetch(FIREBASE_URI, {
+                const response = await fetch(`${FIREBASE_URI}?auth=${token}`, {
                     method : 'POST',
                     body   : JSON.stringify({
                         name     : this.state.placeName,

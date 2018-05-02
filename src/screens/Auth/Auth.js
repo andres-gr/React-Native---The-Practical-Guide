@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Dimensions, ImageBackground, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback, View } from 'react-native'
+import { ActivityIndicator, Dimensions, ImageBackground, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback, View } from 'react-native'
 import SplashScreen from 'react-native-splash-screen'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import startMainTabs from '../MainTabs/startMainTabs'
@@ -70,7 +70,8 @@ class AuthScreen extends Component {
         Dimensions.addEventListener('change', this._handleOrientationChange)
     }
     state = {
-        controls: {
+        checking : false,
+        controls : {
             email           : '',
             password        : '',
             confirmPassword : ''
@@ -147,6 +148,9 @@ class AuthScreen extends Component {
         this.setState({ viewMode: height > 500 ? 'portrait' : 'landscape' })
     }
     _handleSwitchLogin = () => {
+        if (this.state.checking) {
+            return
+        }
         this.setState(prevState => ({
             isLogin  : !prevState.isLogin,
             controls : {
@@ -155,12 +159,24 @@ class AuthScreen extends Component {
             }
         }))
     }
-    _handleLogin = () => {
+    _handleLogin = async () => {
         authValidator.check(this.state.controls)
         const valid = authValidator.isValid()
         if (valid) {
-            this.props.login({ variables: { email: this.state.controls.email, password: this.state.controls.confirmPassword } })
-            startMainTabs()
+            this.setState({ checking: true })
+            try {
+                const auth = await this.props.login({ variables: { email: this.state.controls.email, password: this.state.controls.confirmPassword, isLogin: this.state.isLogin } })
+                if (auth.data.login.authError) {
+                    alert('Internal error, try again')
+                    this.setState({ checking: false })
+                } else {
+                    startMainTabs()
+                }
+            } catch (e) {
+                console.log(e)
+                alert('Internal error, try again')
+                this.setState({ checking: false })
+            }
         } else {
             alert(authValidator.getError())
         }
@@ -180,6 +196,7 @@ class AuthScreen extends Component {
                     }
                     <RaisedButton
                         color="#29AAF4"
+                        disabled={ this.state.checking }
                         onPress={ this._handleSwitchLogin }
                     >
                         Switch to { this.state.isLogin ? 'Sign Up' : 'Login' }
@@ -228,13 +245,18 @@ class AuthScreen extends Component {
                             </GlamPasswordContainer>
                         </GlamInputContainer>
                     </TouchableWithoutFeedback>
-                    <RaisedButton
-                        color="#29AAF4"
-                        disabled={ !this.state.isValid }
-                        onPress={ this._handleLogin }
-                    >
-                        Submit
-                    </RaisedButton>
+                    { this.state.checking
+                        ? <ActivityIndicator />
+                        : (
+                            <RaisedButton
+                                color="#29AAF4"
+                                disabled={ !this.state.isValid }
+                                onPress={ this._handleLogin }
+                            >
+                                Submit
+                            </RaisedButton>
+                        )
+                    }
                 </GlamAuthContainer>
             </GlamImageBackground>
         )
