@@ -10,6 +10,10 @@ export const FIREBASE_SIGNUP = `https://www.googleapis.com/identitytoolkit/v3/re
 
 export const FIREBASE_LOGIN = `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${API_KEY}`
 
+export const FIREBASE_REFRESH = `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`
+
 export const TOKEN_KEY = '@auth/token'
 
 export const EXPIRY_DATE = '@auth/expiresIn'
+
+export const REFRESH_TOKEN = '@auth/refresh'

@@ -1,8 +1,8 @@
 import { AsyncStorage } from 'react-native'
-import moment from 'moment'
 import GET_CURRENT_PLACES from './places.graphql'
 import TOKEN from './authQuery.graphql'
-import { FIREBASE_URI, FIREBASE_DELETE_URI, FIREBASE_SIGNUP, FIREBASE_LOGIN, TOKEN_KEY, EXPIRY_DATE } from '../../../../utils/constants'
+import { FIREBASE_URI, FIREBASE_DELETE_URI, FIREBASE_SIGNUP, FIREBASE_LOGIN, TOKEN_KEY, EXPIRY_DATE, REFRESH_TOKEN } from '../../../../utils/constants'
+import authRefresh from '../../../../utils/helpers/authRefresh';
 
 let idPlace = 0
 
@@ -104,19 +104,16 @@ const rootState = {
                 }
                 const request = await fetch(isLogin ? FIREBASE_LOGIN : FIREBASE_SIGNUP, payload),
                     response = await request.json()
-                if (response.error) {
+                const result = await authRefresh({ response })
+                if (result.error) {
                     return {
                         __typename : 'Auth',
-                        authError  : response.error.message
+                        authError  : result.error.message
                     }
                 }
-                const expiresIn = parseInt(response.expiresIn, 10)
-                const expiryDate = moment().add(expiresIn, 's')._d
-                await AsyncStorage.setItem(TOKEN_KEY, response.idToken)
-                await AsyncStorage.setItem(EXPIRY_DATE, expiryDate)
                 const data = {
                     __typename : 'Auth',
-                    authToken  : response.idToken
+                    authToken  : result.idToken
                 }
                 cache.writeQuery({ data, query: TOKEN })
                 return data

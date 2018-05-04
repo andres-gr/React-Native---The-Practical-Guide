@@ -3,7 +3,8 @@ import { Navigation } from 'react-native-navigation'
 import { AsyncStorage } from 'react-native'
 import registerScreens from './screens/'
 import startMainTabs from './screens/MainTabs/startMainTabs'
-import { TOKEN_KEY, EXPIRY_DATE } from './utils/constants'
+import { TOKEN_KEY, EXPIRY_DATE, REFRESH_TOKEN, FIREBASE_REFRESH } from './utils/constants'
+import authRefresh from './utils/helpers/authRefresh'
 
 registerScreens()
 
@@ -23,31 +24,55 @@ const clearStorage = () => {
         })
 }
 
-AsyncStorage.getItem(TOKEN_KEY)
-    .catch(() => {
-        clearStorage()
+Promise.all([
+    AsyncStorage.getItem(TOKEN_KEY),
+    AsyncStorage.getItem(EXPIRY_DATE),
+    AsyncStorage.getItem(REFRESH_TOKEN)
+])
+    .then(result => {
+        const [token, expiry, refresh] = result
+        if (token && expiry) {
+            const now = new Date(),
+                date = new Date(expiry)
+            if (date > now) {
+                startMainTabs()
+                SplashScreen.hide()
+            } else if (refresh) {
+                return fetch(FIREBASE_REFRESH, {
+                    method  : 'POST',
+                    headers : {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `grant_type=refresh_token&refresh_token=${refresh}`
+                }).then(response => response.json())
+            } else {
+                throw new Error('no refresh')
+            }
+        } else {
+            throw new Error('no valid token')
+        }
     })
     .then(result => {
-        if (!result) {
-            throw new Error('No token')
+        if (result) {
+            authRefresh({
+                response: {
+                    idToken      : result.id_token,
+                    error        : result.error,
+                    refreshToken : result.refresh_token,
+                    expiresIn    : result.expires_in
+                }
+            }).then(response => {
+                if (response.idToken) {
+                    startMainTabs()
+                    SplashScreen.hide()
+                } else {
+                    throw new Error('no token')
+                }
+            })
         }
-        return AsyncStorage.getItem(EXPIRY_DATE)
     })
-    .then(expiryDate => {
-        if (!expiryDate) {
-            throw new Error('No date')
-        }
-        const date = new Date(expiryDate),
-            now = new Date()
-        if (date > now) {
-            startMainTabs()
-            SplashScreen.hide()
-        } else {
-            throw new Error('expired')
-        }
-    })
-    .catch(err => {
-        console.log('catched', err)
+    .catch(error => {
+        console.log('catched', error)
         clearStorage()
     })
 
