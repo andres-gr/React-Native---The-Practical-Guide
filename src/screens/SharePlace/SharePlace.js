@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { Button, ScrollView, View, ActivityIndicator, AsyncStorage } from 'react-native'
+import { Button, ScrollView, View, ActivityIndicator } from 'react-native'
 import _ from 'lodash'
-import { FIREBASE_STOREIMAGE, FIREBASE_URI, TOKEN_KEY } from '../../utils/constants'
+import { FIREBASE_STOREIMAGE, FIREBASE_URI } from '../../utils/constants'
 import addPlace from '../../decorators/addPlace'
 import sideDrawerToggle from '../../utils/helpers/sideDrawerToggle'
 import glamFactory from '../../utils/styles/glamFactory'
@@ -14,6 +14,7 @@ import PickLocation from '../../components/PickLocation/PickLocation'
 import placesSchema from '../../utils/validation/places'
 import locationSchema from '../../utils/validation/location'
 import imageSchema from '../../utils/validation/image'
+import { getToken } from '../../utils/helpers/authRefresh';
 
 const GlamScrollContainer = glamFactory(View, 'GlamScrollContainer', {
     alignItems  : 'center',
@@ -59,7 +60,7 @@ class SharePlaceScreen extends PureComponent {
         this.setState({ checking: true })
         if (this.checkValidity()) {
             try {
-                const token = await AsyncStorage.getItem(TOKEN_KEY),
+                const { idToken: token } = await getToken(),
                     imageResponse = await fetch(FIREBASE_STOREIMAGE, {
                         method : 'POST',
                         body   : JSON.stringify({

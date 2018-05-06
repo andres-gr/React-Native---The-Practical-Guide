@@ -1,8 +1,8 @@
 import { AsyncStorage } from 'react-native'
 import GET_CURRENT_PLACES from './places.graphql'
 import TOKEN from './authQuery.graphql'
-import { FIREBASE_URI, FIREBASE_DELETE_URI, FIREBASE_SIGNUP, FIREBASE_LOGIN, TOKEN_KEY, EXPIRY_DATE, REFRESH_TOKEN } from '../../../../utils/constants'
-import authRefresh from '../../../../utils/helpers/authRefresh';
+import { FIREBASE_URI, FIREBASE_DELETE_URI, FIREBASE_SIGNUP, FIREBASE_LOGIN, TOKEN_KEY } from '../../../../utils/constants'
+import { authRefresh, getToken } from '../../../../utils/helpers/authRefresh'
 
 let idPlace = 0
 
@@ -75,7 +75,7 @@ const rootState = {
             },
             deletePlace: async (_root, { key }, { cache }) => {
                 try {
-                    await fetch(FIREBASE_DELETE_URI(key, await AsyncStorage.getItem(TOKEN_KEY)), { method: 'DELETE' })
+                    await fetch(FIREBASE_DELETE_URI(key, await getToken().idToken), { method: 'DELETE' })
                     const prevCache = cache.readQuery({ query: GET_CURRENT_PLACES }),
                         data = {
                             places: prevCache.places.filter(place => place.key !== key)

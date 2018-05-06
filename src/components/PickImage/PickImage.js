@@ -29,7 +29,7 @@ class PickImage extends PureComponent {
         image: null
     }
     _handlePress = () => {
-        ImagePicker.showImagePicker({ title: 'Pick an image' }, result => {
+        ImagePicker.showImagePicker({ title: 'Pick an image', maxHeight: 600, maxWidth: 800 }, result => {
             if (result.didCancel) {
                 console.log('Canceled pick image')
             } else if (result.error) {

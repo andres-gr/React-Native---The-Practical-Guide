@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native'
 import registerScreens from './screens/'
 import startMainTabs from './screens/MainTabs/startMainTabs'
 import { TOKEN_KEY, EXPIRY_DATE, REFRESH_TOKEN, FIREBASE_REFRESH } from './utils/constants'
-import authRefresh from './utils/helpers/authRefresh'
+import { authRefresh } from './utils/helpers/authRefresh'
 
 registerScreens()
 
