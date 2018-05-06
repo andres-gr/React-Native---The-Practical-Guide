@@ -14,7 +14,7 @@ import PickLocation from '../../components/PickLocation/PickLocation'
 import placesSchema from '../../utils/validation/places'
 import locationSchema from '../../utils/validation/location'
 import imageSchema from '../../utils/validation/image'
-import { getToken } from '../../utils/helpers/authRefresh';
+import { getToken } from '../../utils/helpers/authRefresh'
 
 const GlamScrollContainer = glamFactory(View, 'GlamScrollContainer', {
     alignItems  : 'center',
